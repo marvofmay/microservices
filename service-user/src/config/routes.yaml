@@ -1,0 +1,15 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+category_controllers:
+    resource:
+        path: ../src/Category/Presentation/API
+        namespace: App\Category\Presentation\API
+    type: annotation
+user_controllers:
+    resource:
+        path: ../src/User/Presentation/API
+        namespace: App\User\Presentation\API
+    type: annotation

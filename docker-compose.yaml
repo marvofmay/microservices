@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  service-user:
+    container_name: service-user
+    build:
+      context: ./service-user
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"  # Mapuj port 80 z kontenera na port 80 hosta
+    volumes:
+      - ./service-user/src:/var/www/html
+    depends_on:
+      - service-user-db
+
+  service-movie:
+    container_name: service-movie
+    build:
+      context: ./service-movie
+      dockerfile: Dockerfile
+    ports:
+      - "81:80"  # Mapuj port 80 z kontenera na port 81 hosta
+    volumes:
+      - ./service-movie/src:/var/www/html
+    depends_on:
+      - service-movie-db
+
+  service-user-db:
+    container_name: service-user-db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: service_user
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      
+  phpmyadmin-user:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-user
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: service-user-db
+
+  service-movie-db:
+    container_name: service-movie-db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: service_movie
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      
+  phpmyadmin-movie:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-movie
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: service-movie-db    
+      
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq         

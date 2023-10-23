@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/service-movie/src" isTestSource="false" packagePrefix="App" />
+      <sourceFolder url="file://$MODULE_DIR$/service-movie/src/migrations" isTestSource="false" packagePrefix="DoctrineMigrations" />
+      <sourceFolder url="file://$MODULE_DIR$/service-movie/src/src" isTestSource="false" packagePrefix="App" />
+      <sourceFolder url="file://$MODULE_DIR$/service-movie/src/var/cache/dev" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/service-movie/src/var/cache/dev/ContainerJ1LerC7/getConsole_Command_CachePoolListService.php/restapi" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/service-movie/src/var/cache/dev/ContainerJ1LerC7/getConsole_Command_CachePoolListService.php/todo" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/service-movie/src/var/cache/dev/ContainerJ1LerC7/getConsole_Command_CachePoolListService.php/todo/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/service-movie/src/var/cache/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/service-user/src" isTestSource="false" packagePrefix="App" />
+      <sourceFolder url="file://$MODULE_DIR$/service-user/src/migrations" isTestSource="false" packagePrefix="DoctrineMigrations" />
+      <sourceFolder url="file://$MODULE_DIR$/service-user/src/src" isTestSource="false" packagePrefix="App" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
