@@ -1,0 +1,37 @@
+<?php //App%255CUser%255CDomain%255CEntity%255CUser
+
+return [PHP_INT_MAX, static function () { return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Doctrine\\ORM\\Mapping\\Entity'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Entity')),
+        clone ($p['Doctrine\\ORM\\Mapping\\Table'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\Table')),
+        clone ($p['Doctrine\\ORM\\Mapping\\UniqueConstraint'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\UniqueConstraint')),
+        clone ($p['Doctrine\\ORM\\Mapping\\HasLifecycleCallbacks'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Mapping\\HasLifecycleCallbacks')),
+        clone ($p['Gedmo\\Mapping\\Annotation\\SoftDeleteable'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Gedmo\\Mapping\\Annotation\\SoftDeleteable')),
+    ],
+    null,
+    [
+        'stdClass' => [
+            'name' => [
+                1 => 'user',
+                'unique_email',
+            ],
+            'uniqueConstraints' => [
+                1 => [
+                    $o[2],
+                ],
+            ],
+            'columns' => [
+                2 => [
+                    'email',
+                ],
+            ],
+        ],
+    ],
+    [
+        $o[0],
+        $o[1],
+        $o[3],
+        $o[4],
+    ],
+    []
+); }];
