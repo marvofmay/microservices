@@ -99,14 +99,29 @@ class ComposerStaticInitfaa9af32f95677140c77c85afcb4c767
             'PhpParser\\' => 10,
             'PHPStan\\PhpDocParser\\' => 21,
         ),
+        'N' => 
+        array (
+            'Negotiation\\' => 12,
+            'Namshi\\JOSE\\' => 12,
+        ),
         'M' => 
         array (
             'Monolog\\' => 8,
             'Masterminds\\' => 12,
         ),
+        'L' => 
+        array (
+            'Lexik\\Bundle\\JWTAuthenticationBundle\\' => 37,
+            'Lcobucci\\JWT\\' => 13,
+            'Lcobucci\\Clock\\' => 15,
+        ),
         'G' => 
         array (
             'Gedmo\\' => 6,
+        ),
+        'F' => 
+        array (
+            'FOS\\RestBundle\\' => 15,
         ),
         'D' => 
         array (
@@ -396,6 +411,14 @@ class ComposerStaticInitfaa9af32f95677140c77c85afcb4c767
         array (
             0 => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src',
         ),
+        'Negotiation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/willdurand/negotiation/src/Negotiation',
+        ),
+        'Namshi\\JOSE\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/namshi/jose/src/Namshi/JOSE',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
@@ -404,9 +427,25 @@ class ComposerStaticInitfaa9af32f95677140c77c85afcb4c767
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
         ),
+        'Lexik\\Bundle\\JWTAuthenticationBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lexik/jwt-authentication-bundle',
+        ),
+        'Lcobucci\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lcobucci/jwt/src',
+        ),
+        'Lcobucci\\Clock\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lcobucci/clock/src',
+        ),
         'Gedmo\\' => 
         array (
             0 => __DIR__ . '/..' . '/gedmo/doctrine-extensions/src',
+        ),
+        'FOS\\RestBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/friendsofsymfony/rest-bundle',
         ),
         'Doctrine\\SqlFormatter\\' => 
         array (
@@ -496,6 +535,16 @@ class ComposerStaticInitfaa9af32f95677140c77c85afcb4c767
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+    );
+
+    public static $prefixesPsr0 = array (
+        'J' => 
+        array (
+            'JsonpCallbackValidator' => 
+            array (
+                0 => __DIR__ . '/..' . '/willdurand/jsonp-callback-validator/src',
+            ),
         ),
     );
 
@@ -1676,6 +1725,7 @@ class ComposerStaticInitfaa9af32f95677140c77c85afcb4c767
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitfaa9af32f95677140c77c85afcb4c767::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitfaa9af32f95677140c77c85afcb4c767::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitfaa9af32f95677140c77c85afcb4c767::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitfaa9af32f95677140c77c85afcb4c767::$classMap;
 
         }, null, ClassLoader::class);

@@ -13,3 +13,6 @@ user_controllers:
         path: ../src/User/Presentation/API
         namespace: App\User\Presentation\API
     type: annotation
+api_login_check:
+    path: /api/login_check
+
