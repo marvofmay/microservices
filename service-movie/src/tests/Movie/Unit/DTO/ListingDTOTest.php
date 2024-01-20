@@ -2,7 +2,7 @@
 
 namespace App\Tests\Movie\Unit\DTO;
 
-use App\Movie\Domain\DTO\ListingDTO;
+use App\Movie\Domain\DTO\ListingMovieDTO;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,7 +19,7 @@ class ListingDTOTest extends TestCase
         ];
 
         $request = Request::create('', 'GET', $requestData);
-        $listingDTO = new ListingDTO($request);
+        $listingDTO = new ListingMovieDTO($request);
 
         $this->assertEquals(1, $listingDTO->getAlgorithm());
         $this->assertEquals(10, $listingDTO->getLimit());
@@ -32,7 +32,7 @@ class ListingDTOTest extends TestCase
     {
         $request = new Request();
 
-        $listingDTO = new ListingDTO($request);
+        $listingDTO = new ListingMovieDTO($request);
 
         $this->assertNull($listingDTO->getAlgorithm());
         $this->assertNull($listingDTO->getLimit());
@@ -50,7 +50,7 @@ class ListingDTOTest extends TestCase
         ];
 
         $request = Request::create('', 'GET', $requestData);
-        $listingDTO = new ListingDTO($request);
+        $listingDTO = new ListingMovieDTO($request);
 
         $this->assertEquals(2, $listingDTO->getAlgorithm());
         $this->assertEquals('invalidSort', $listingDTO->getOrderBy());

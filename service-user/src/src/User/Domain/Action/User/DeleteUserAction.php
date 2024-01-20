@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\User\Domain\Action\User;
 
 use App\User\Application\Command\User\DeleteUserCommand;
@@ -8,12 +10,8 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class DeleteUserAction
 {
-    private MessageBusInterface $commandBus;
-    private User $user;
-
-    public function __construct(MessageBusInterface $commandBus)
+    public function __construct(private readonly MessageBusInterface $commandBus, private User $user)
     {
-        $this->commandBus = $commandBus;
     }
 
     public function setUserToDelete(User $user): self

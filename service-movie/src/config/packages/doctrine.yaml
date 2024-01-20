@@ -31,6 +31,10 @@ doctrine:
             string_functions:
                 regexp: DoctrineExtensions\Query\Mysql\Regexp
                 rand: DoctrineExtensions\Query\Mysql\Rand
+        filters:
+            softdeleteable:
+                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                enabled: true
 when@test:
     doctrine:
         dbal:

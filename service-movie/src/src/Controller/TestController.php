@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+declare(strict_types = 1);
 
 namespace App\Controller;
 
@@ -10,12 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TestController extends AbstractController
 {
-    #[Route('/test', name: 'test')]
+    #[Route('/test', name: 'test', methods: ['GET'])]
     public function list(): Response
     {
-        return new Response(
-            '<html><body>--- test ---</body></html>'
-        );
-
+        return $this->json(['data' => 'ddd'], Response::HTTP_OK);
     }
 }

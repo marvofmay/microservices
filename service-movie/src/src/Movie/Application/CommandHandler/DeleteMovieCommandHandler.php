@@ -3,22 +3,21 @@
 namespace App\Movie\Application\CommandHandler;
 
 use App\Movie\Application\Command\DeleteMovieCommand;
-use App\Movie\Domain\Service\WriterService\MovieWriterService;
+use Doctrine\ORM\EntityManagerInterface;
 
 class DeleteMovieCommandHandler
 {
-    private MovieWriterService $movieWriterService;
-
-    public function __construct(MovieWriterService $movieWriterService)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $this->movieWriterService = $movieWriterService;
     }
 
     public function __invoke(DeleteMovieCommand $command): void
     {
         $movie = $command->getMovie();
         $movie->setActive(false);
-        $movie->setDeletedAt(new \DateTime());
-        $this->movieWriterService->saveMovieInDB($movie);
+        $this->entityManager->persist($movie);
+        $this->entityManager->flush();
+        $this->entityManager->remove($movie);
+        $this->entityManager->flush();
     }
 }

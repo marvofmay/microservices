@@ -1,32 +1,30 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\User\Domain\Action\User;
 
 use App\User\Application\Command\User\RegisterUserCommand;
-use App\User\Presentation\Request\User\RegisterRequest;
+use App\User\Domain\DTO\User\RegisterDTO;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class RegisterUserAction
 {
     private MessageBusInterface $commandBus;
-    private RegisterRequest $registerRequest;
 
-    public function __construct(MessageBusInterface $commandBus, RegisterRequest $registerRequest)
+    public function __construct(MessageBusInterface $commandBus)
     {
         $this->commandBus = $commandBus;
-        $this->registerRequest = $registerRequest;
     }
 
-    public function execute(): void
+    public function execute(RegisterDTO $registerDTO): void
     {
         $this->commandBus->dispatch(new RegisterUserCommand(
-            $this->registerRequest->getFirstName(),
-            $this->registerRequest->getLastName(),
-            $this->registerRequest->getEmail(),
-            $this->registerRequest->getPhone(),
-            $this->registerRequest->getPassword(),
-            true,
-            ['ROLE_USER']
+            $registerDTO->getFirstName(),
+            $registerDTO->getLastName(),
+            $registerDTO->getEmail(),
+            $registerDTO->getPhone(),
+            $registerDTO->getPassword()
         ));
     }
 }

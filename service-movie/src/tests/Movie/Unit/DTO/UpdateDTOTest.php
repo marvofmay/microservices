@@ -2,7 +2,7 @@
 
 namespace App\Tests\Movie\Unit\DTO;
 
-use App\Movie\Domain\DTO\UpdateDTO;
+use App\Movie\Domain\DTO\UpdateMovieDTO;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,7 +22,7 @@ class UpdateDTOTest extends WebTestCase
 
         $requestData = self::requestData();
         $request = new Request([], [], [], [], [], [], json_encode($requestData));
-        $updateDTO = new UpdateDTO($request);
+        $updateDTO = new UpdateMovieDTO($request);
 
         $this->assertEquals($requestData['uuid'], $updateDTO->getUuid());
         $this->assertEquals($requestData['title'], $updateDTO->getTitle());
@@ -32,7 +32,7 @@ class UpdateDTOTest extends WebTestCase
     public function testGetTitleFromEmptyRequest(): void
     {
         $request = new Request();
-        $updateDTO = new UpdateDTO($request);
+        $updateDTO = new UpdateMovieDTO($request);
 
         $this->assertNull($updateDTO->getTitle());
     }

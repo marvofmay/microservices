@@ -3,15 +3,20 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
-category_controllers:
-    resource:
-        path: ../src/Category/Presentation/API
-        namespace: App\Category\Presentation\API
-    type: annotation
 user_controllers:
     resource:
-        path: ../src/User/Presentation/API
-        namespace: App\User\Presentation\API
+        path: ../src/User/Presentation/API/User
+        namespace: App\User\Presentation\API\User
+    type: annotation
+address_controllers:
+    resource:
+        path: ../src/User/Presentation/API/Address
+        namespace: App\User\Presentation\API\Address
+    type: annotation
+select_option_controllers:
+    resource:
+        path: ../src/User/Presentation/API/SelectOption
+        namespace: App\User\Presentation\API\SelectOption
     type: annotation
 api_login_check:
     path: /api/login_check

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/microservices-docker.iml" filepath="$PROJECT_DIR$/.idea/microservices-docker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../vue-docker/.idea/vue-docker.iml" filepath="$PROJECT_DIR$/../vue-docker/.idea/vue-docker.iml" />
     </modules>
   </component>
 </project>

@@ -7,18 +7,13 @@ use App\Movie\Domain\Entity\Movie;
 
 class UpdateMovieCommand
 {
-    public string $uuid;
-    public string $title;
-    public bool $active;
-    public Movie $movie;
-
-    public function __construct(string $uuid, string $title, bool $active, Movie $movie)
-    {
-        $this->uuid = $uuid;
-        $this->title = $title;
-        $this->active = $active;
-        $this->movie = $movie;
-    }
+    public function __construct(
+        public string $uuid,
+        public string $title,
+        public bool $active,
+        public array $categories,
+        public Movie $movie
+    ) {}
 
     public function getUUID(): string
     {
@@ -33,6 +28,11 @@ class UpdateMovieCommand
     public function getActive(): bool
     {
         return $this->active;
+    }
+
+    public function getCategories(): array
+    {
+        return $this->categories;
     }
 
     public function getMovie(): Movie

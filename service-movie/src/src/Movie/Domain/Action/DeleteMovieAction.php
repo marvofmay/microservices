@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Movie\Domain\Action;
 
 use App\Movie\Domain\Entity\Movie;
@@ -8,12 +10,8 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class DeleteMovieAction
 {
-    private MessageBusInterface $commandBus;
-    private Movie $movie;
-
-    public function __construct(MessageBusInterface $commandBus)
+    public function __construct(private readonly MessageBusInterface $commandBus, private Movie $movie)
     {
-        $this->commandBus = $commandBus;
     }
 
     public function setMovieToDelete(Movie $movie): self

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Movie\Domain\Repository\ReaderRepository;
 
 use App\Movie\Domain\Entity\Movie;
 use App\Movie\Domain\Exception\MovieNotFindByUUIDException;
-use App\Movie\Domain\Exception\MoviesNotExistsException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class MovieReaderRepository extends ServiceEntityRepository
@@ -15,6 +17,9 @@ class MovieReaderRepository extends ServiceEntityRepository
         parent::__construct($registry, Movie::class);
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function getMovieByTitleAndDifferentUUID(string $title, string $uuid): ?Movie
     {
         return $this->getEntityManager()
@@ -24,6 +29,9 @@ class MovieReaderRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function getMovieByTitle(string $title): ?Movie
     {
         return $this->getEntityManager()
@@ -32,11 +40,24 @@ class MovieReaderRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function getMovieByUUID(string $uuid): ?Movie
+    /**
+     * @throws NonUniqueResultException
+     * @throws MovieNotFindByUUIDException
+     */
+    public function getMovieByUUID(string $uuid, bool $withDeleted = false): ?Movie
     {
+        if ($withDeleted) {
+            $filters = $this->getEntityManager()->getFilters();
+            $filters->disable('softdeleteable');
+        }
+
         $movie = $this->getEntityManager()
-            ->createQuery('SELECT m FROM App\Movie\Domain\Entity\Movie m WHERE m.uuid = :uuid')
+            ->createQueryBuilder()
+            ->select('m')
+            ->from(Movie::class, 'm')
+            ->where('m.' . Movie::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid)
+            ->getQuery()
             ->getOneOrNullResult();
 
         if (!$movie) {
@@ -44,32 +65,5 @@ class MovieReaderRepository extends ServiceEntityRepository
         }
 
         return $movie;
-    }
-
-    public function getNotDeletedMovieByUUID(string $uuid): ?Movie
-    {
-        $movie = $this->getEntityManager()
-            ->createQuery('SELECT m FROM App\Movie\Domain\Entity\Movie m WHERE m.uuid = :uuid and m.deletedAt IS NULL')
-            ->setParameter('uuid', $uuid)
-            ->getOneOrNullResult();
-
-        if (!$movie) {
-            throw new MovieNotFindByUUIDException('Movie not found by uuid: ' . $uuid);
-        }
-
-        return $movie;
-    }
-
-    public function getMovies(): array
-    {
-        $movies = $this->getEntityManager()
-            ->createQuery('SELECT u FROM App\User\Domain\Entity\User u ORDER BY u.createdAt')
-            ->getResult();
-
-        if (!$movies) {
-            throw new MoviesNotExistsException('Movies not exists.');
-        }
-
-        return $movies;
     }
 }

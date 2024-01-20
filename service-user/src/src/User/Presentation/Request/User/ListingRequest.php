@@ -22,6 +22,15 @@ class ListingRequest
         $this->orderBy = ! empty($this->data['sort']) ? str_starts_with($this->data['sort'], '-') ? substr($this->data['sort'], 1) : $this->data['sort'] : null;
         $this->orderDirection = ! empty($this->data['sort']) ? str_starts_with($this->data['sort'], '-') ? 'DESC' : 'ASC' : null;
         $this->filters = array_filter($this->data, fn ($key) => in_array($key, User::getAttributes()), ARRAY_FILTER_USE_KEY);
+
+        foreach ($this->data as $key => $val) {
+            if ($key === 'deleted' && in_array($val, ["0", "1", "true", "false"])) {
+                $this->filters[$key] = $val;
+            }
+            if ($key === 'phrase') {
+                $this->filters[$key] = $val;
+            }
+        }
     }
 
     public function getLimit(): ?int

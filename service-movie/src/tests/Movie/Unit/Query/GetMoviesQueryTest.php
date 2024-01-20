@@ -4,7 +4,7 @@ namespace App\Tests\Movie\Unit\Query;
 
 use PHPUnit\Framework\TestCase;
 use App\Movie\Application\Query\GetMoviesQuery;
-use App\Movie\Domain\DTO\ListingDTO;
+use App\Movie\Domain\DTO\ListingMovieDTO;
 use App\Movie\Domain\Entity\Movie;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +23,7 @@ class GetMoviesQueryTest extends TestCase
 
         $request = $this->createMock(Request::class);
         $request->query = new ParameterBag($requestData);
-        $listingDTO = new ListingDTO($request);
+        $listingDTO = new ListingMovieDTO($request);
         $query = new GetMoviesQuery($listingDTO);
 
         $this->assertEquals(1, $query->getAlgorithm());
@@ -38,7 +38,7 @@ class GetMoviesQueryTest extends TestCase
     {
         $request = $this->createMock(Request::class);
         $request->query = new ParameterBag([]);
-        $listingDTO = new ListingDTO($request);
+        $listingDTO = new ListingMovieDTO($request);
         $query = new GetMoviesQuery($listingDTO);
 
         $this->assertNull($query->getAlgorithm());

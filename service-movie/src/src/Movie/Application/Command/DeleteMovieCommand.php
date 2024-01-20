@@ -1,16 +1,15 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Movie\Application\Command;
 
 use App\Movie\Domain\Entity\Movie;
 
 class DeleteMovieCommand
 {
-    public Movie $movie;
-
-    public function __construct(Movie $movie)
+    public function __construct(private readonly Movie $movie)
     {
-        $this->movie = $movie;
     }
 
     public function getMovie(): Movie

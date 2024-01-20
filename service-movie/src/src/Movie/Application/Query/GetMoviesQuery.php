@@ -2,7 +2,7 @@
 
 namespace App\Movie\Application\Query;
 
-use App\Movie\Domain\DTO\ListingDTO;
+use App\Movie\Presentation\Request\ListingMovieRequest;
 use App\Movie\Domain\Entity\Movie;
 
 class GetMoviesQuery
@@ -14,14 +14,14 @@ class GetMoviesQuery
     private string $orderDirection;
     private array $filters;
 
-    public function __construct(ListingDTO $listingDTO)
+    public function __construct(ListingMovieRequest $listingMovieRequest)
     {
-        $this->algorithm = $listingDTO->getAlgorithm() ?? null;
-        $this->limit = $listingDTO->getLimit() ?? 10;
-        $this->page = $listingDTO->getPage() ?? 1;
-        $this->orderBy = $listingDTO->getOrderBy() ?? Movie::COLUMN_CREATED_AT;
-        $this->orderDirection = $listingDTO->getOrderDirection() ?? 'DESC';
-        $this->filters = $listingDTO->getFilters();
+        $this->algorithm = $listingMovieRequest->getAlgorithm() ?? null;
+        $this->limit = $listingMovieRequest->getLimit() ?? 10;
+        $this->page = $listingMovieRequest->getPage() ?? 1;
+        $this->orderBy = $listingMovieRequest->getOrderBy() ?? Movie::COLUMN_CREATED_AT;
+        $this->orderDirection = $listingMovieRequest->getOrderDirection() ?? 'DESC';
+        $this->filters = $listingMovieRequest->getFilters();
     }
 
     public function getAlgorithm(): ?int

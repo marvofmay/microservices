@@ -1,32 +1,36 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\User\Domain\Action\User;
 
 use App\User\Application\Command\User\CreateUserCommand;
-use App\User\Presentation\Request\User\CreateRequest;
+use App\User\Domain\DTO\User\CreateDTO;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class CreateUserAction
 {
     private MessageBusInterface $commandBus;
-    private CreateRequest $createRequest;
 
-    public function __construct(CreateRequest $createRequest, MessageBusInterface $commandBus)
+    public function __construct(MessageBusInterface $commandBus)
     {
-        $this->createRequest = $createRequest;
         $this->commandBus = $commandBus;
     }
 
-    public function execute(): void
+    public function execute(CreateDTO $createDTO): void
     {
         $this->commandBus->dispatch(new CreateUserCommand(
-            $this->createRequest->getFirstName(),
-            $this->createRequest->getLastName(),
-            $this->createRequest->getEmail(),
-            $this->createRequest->getPhone(),
-            $this->createRequest->getPassword(),
-            $this->createRequest->getActive(),
-            $this->createRequest->getRoles()
+            $createDTO->getFirstName(),
+            $createDTO->getLastName(),
+            $createDTO->getEmail(),
+            $createDTO->getPhone(),
+            $createDTO->getPassword(),
+            $createDTO->getActive(),
+            $createDTO->getBornOn(),
+            $createDTO->getRoles(),
+            $createDTO->getSkills(),
+            $createDTO->getInterests(),
+            $createDTO->getAddresses(),
         ));
     }
 }

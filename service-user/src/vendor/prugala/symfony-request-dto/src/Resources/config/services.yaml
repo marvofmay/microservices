@@ -1,0 +1,15 @@
+services:
+  _defaults:
+    autowire: true
+
+  Prugala\RequestDto\ArgumentResolver\RequestDtoArgumentResolver:
+    tags:
+      - { name: controller.argument_value_resolver, priority: 50 }
+
+  Prugala\RequestDto\EventListener\RequestValidationExceptionListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception }
+
+  Prugala\RequestDto\Serializer\Normalizer\CustomNormalizer:
+    tags:
+        - { name: serializer.normalizer }

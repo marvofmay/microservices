@@ -3,7 +3,7 @@
 namespace App\Tests\Movie\Unit\DTO;
 
 use App\Movie\Domain\Entity\Movie;
-use App\Movie\Domain\DTO\CreateDTO;
+use App\Movie\Domain\DTO\CreateMovieDTO;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -30,7 +30,7 @@ class CreateDTOTest extends WebTestCase
     {
         $requestData = self::requestData();
         $request = new Request([], [], [], [], [], [], json_encode($requestData));
-        $createDTO = new CreateDTO($request);
+        $createDTO = new CreateMovieDTO($request);
 
         $this->assertEquals($requestData['movies'], $createDTO->getMovies());
     }
@@ -38,7 +38,7 @@ class CreateDTOTest extends WebTestCase
     public function testGetMoviesFromEmptyRequest(): void
     {
         $request = new Request();
-        $createDTO = new CreateDTO($request);
+        $createDTO = new CreateMovieDTO($request);
 
         $this->assertNull($createDTO->getMovies());
     }
@@ -54,7 +54,7 @@ class CreateDTOTest extends WebTestCase
             [Movie::COLUMN_TITLE => 'Pulp Fiction 3', Movie::COLUMN_ACTIVE => true],
         ];
 
-        $createDTO = new CreateDTO($this->createMock(Request::class));
+        $createDTO = new CreateMovieDTO($this->createMock(Request::class));
         $reflection = new \ReflectionClass($createDTO);
         $privateMethodGetUniqueTitleMethod = $reflection->getMethod('getUniqueTitle');
         $privateMethodGetUniqueTitleMethod->setAccessible(true);

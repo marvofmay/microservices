@@ -1,7 +1,12 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Movie\Domain\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Doctrine\ORM\Mapping\UniqueConstraint;
@@ -27,35 +32,44 @@ class Movie
     public const COLUMN_ACTIVE = 'active';
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
-    public const COLUMN_DELETED_AT_AT = 'deletedAt';
+    public const COLUMN_DELETED_AT = 'deletedAt';
+    public const RELATION_CATEGORIES = 'categories';
 
     #[ORM\Id]
     #[ORM\Column(type: "uuid", unique: true)]
     #[ORM\GeneratedValue(strategy: "CUSTOM")]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    #[Groups("movie_info")]
     private UuidInterface $uuid;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\NotBlank]
-    #[Groups("movie_entity_serialization")]
+    #[Groups("movie_info")]
     private string $title;
 
-    #[ORM\Column(type: "boolean")]
-    #[Groups("movie_entity_serialization")]
+    #[ORM\Column(type: Types::BOOLEAN)]
+    #[Groups("movie_info")]
     private bool $active = false;
 
-    #[ORM\Column(type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
-    #[Groups("movie_entity_serialization")]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[Groups("movie_info")]
     private \DateTimeInterface $createdAt;
 
-    #[ORM\Column(type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[Groups("movie_info")]
     private \DateTimeInterface $updatedAt;
 
-    #[ORM\Column(type: "datetime", options: ["nullable" => "true"])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups("movie_info")]
     private ?\DateTimeInterface $deletedAt = null;
+
+    #[ORM\OneToMany(mappedBy: Category::RELATION_MOVIE, targetEntity: Category::class)]
+    #[Groups("movie_info")]
+    public Collection $categories;
 
     public function __construct()
     {
+        $this->{self::RELATION_CATEGORIES} = new ArrayCollection();
     }
 
     public function getUuid(): UuidInterface
@@ -128,6 +142,21 @@ class Movie
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    public function getCategories(): array
+    {
+        $arrayOfCategoriesNames = [];
+        foreach ($this->getCategoriesEntities()->toArray() as $skill) {
+            $arrayOfCategoriesNames[] = $skill->getName();
+        }
+
+        return $arrayOfCategoriesNames;
+    }
+
+    public function getCategoriesEntities(): Collection
+    {
+        return $this->{self::RELATION_CATEGORIES};
     }
 
     public static function getAttributes(): array

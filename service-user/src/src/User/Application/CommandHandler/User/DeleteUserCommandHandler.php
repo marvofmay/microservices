@@ -1,24 +1,25 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\User\Application\CommandHandler\User;
 
 use App\User\Application\Command\User\DeleteUserCommand;
-use App\User\Domain\Service\WriterService\UserWriterService;
+use Doctrine\ORM\EntityManagerInterface;
 
 class DeleteUserCommandHandler
 {
-    private UserWriterService $userWriterService;
-
-    public function __construct(UserWriterService $userWriterService)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
-        $this->userWriterService = $userWriterService;
     }
 
     public function __invoke(DeleteUserCommand $command): void
     {
-        $user = $command->user;
+        $user = $command->getUser();
         $user->setActive(false);
-        $user->setDeletedAt(new \DateTime());
-        $this->userWriterService->saveUserInDB($user);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
     }
 }

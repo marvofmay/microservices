@@ -10,15 +10,17 @@ framework:
             # sync: 'sync://'
 
             #async: '%env(MESSENGER_TRANSPORT_DSN)%'
-            rabbitmq_user_register:
-                dsn: '%env(MESSENGER_TRANSPORT_DSN)%/user_register'
-                options:
-                    exchange:
-                        name: 'user_register' # Nazwa exchange (wymiana)
-                        type: direct # Typ exchange (direct, fanout, topic itp.)
-        routing:
-            #'App\User\Application\Command\RegisterUserCommand': async
-            'App\User\Application\Command\User\RegisterUserCommand': rabbitmq_user_register
+
+
+        #    rabbitmq_user_register:
+        #        dsn: '%env(MESSENGER_TRANSPORT_DSN)%/user_register'
+        #        options:
+        #            exchange:
+        #                name: 'user_register' # Nazwa exchange (wymiana)
+        #                type: direct # Typ exchange (direct, fanout, topic itp.)
+        #routing:
+        #    #'App\User\Application\Command\RegisterUserCommand': async
+        #    'App\User\Application\Command\User\RegisterUserCommand': rabbitmq_user_register
 
 # when@test:
 #    framework:

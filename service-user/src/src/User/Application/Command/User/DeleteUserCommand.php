@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\User\Application\Command\User;
 
 use App\User\Domain\Entity\User;
 
 class DeleteUserCommand
 {
-    public User $user;
 
-    public function __construct(User $user)
+    public function __construct(private readonly User $user)
     {
-        $this->user = $user;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
     }
 }

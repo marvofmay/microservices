@@ -4,7 +4,6 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -23,8 +22,6 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Movie\Presentation\API\MovieController:
-        tags: ['controller.service_arguments']
     App\Repository\Movie\MovieReaderRepository:
         factory: ['@doctrine.orm.entity_manager', getRepository]
         arguments:
@@ -36,6 +33,23 @@ services:
     App\Movie\Application\CommandHandler\UpdateMovieCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Movie\Application\CommandHandler\ToggleActiveMovieCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
     App\Movie\Application\CommandHandler\DeleteMovieCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Movie\Application\CommandHandler\RestoreDeletedMovieCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Movie\Application\QueryHandler\GetMoviesQueryHandler:
+        arguments:
+            $query: '@App\Movie\Application\Query\GetMoviesQuery.php'
+            $entityManager: '@doctrine.orm.entity_manager'
+
+    gedmo.listener.softdeleteable:
+        class: Gedmo\SoftDeleteable\SoftDeleteableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]

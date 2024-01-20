@@ -1,28 +1,32 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\User\Domain\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Doctrine\ORM\Mapping\UniqueConstraint;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-/**
- * @ORM\Entity
- * @ORM\Table(
- *      name="user",
- *      uniqueConstraints={
- *          @UniqueConstraint(name="unique_email", columns={"email"})
- *      }
- *  )*
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
- */
+#[ORM\Entity]
+#[ORM\Table(
+    name: "user",
+    uniqueConstraints: [
+        new UniqueConstraint(name: "unique_email", columns: ["email"])
+    ]
+)]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: "deletedAt", timeAware: false, hardDelete: true)]
 class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
     public const COLUMN_UUID = 'uuid';
@@ -32,212 +36,277 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public const COLUMN_EMAIL = 'email';
     public const COLUMN_PASSWORD = 'password';
     public const COLUMN_ACTIVE = 'active';
-    public const COLUMN_ROLES = 'roles';
+    public const COLUMN_BORN_ON = 'bornOn';
+    public const COLUMN_AVATAR = 'avatar';
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
-    public const COLUMN_DELETED_AT_AT = 'deletedAt';
+    public const COLUMN_DELETED_AT = 'deletedAt';
+    public const RELATION_ADDRESSES = 'addresses';
+    public const RELATION_ROLES = 'roles';
+    public const RELATION_SKILLS = 'skills';
+    public const RELATION_INTERESTS = 'interests';
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: "uuid", unique: true)]
+    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    #[Groups("user_info")]
     private UuidInterface $uuid;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     */
+    #[ORM\Column(type: Types::STRING, length: 50)]
+    #[Assert\NotBlank()]
+    #[Groups("user_info")]
     private string $firstName;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     */
+    #[ORM\Column(type: Types::STRING, length: 50)]
+    #[Assert\NotBlank()]
+    #[Groups("user_info")]
     private string $lastName;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank()
-     * @Assert\Email()
-     */
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
+    #[Assert\NotBlank()]
+    #[Assert\Email()]
+    #[Groups("user_info")]
     private string $email;
 
-    /**
-     * @ORM\Column(type="string", length=15, nullable=true)
-     * @Assert\Email(message="Invalid email format")
-     */
+    #[ORM\Column(type: Types::STRING, length: 15, nullable: true)]
+    #[Assert\NotBlank()]
+    #[Groups("user_info")]
     private ?string $phone;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     */
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Assert\NotBlank()]
+    #[Groups("user_info")]
     private string $password;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: Types::BOOLEAN)]
+    #[Groups("user_info")]
     private bool $active = false;
 
-    /**
-     * @ORM\Column(type="json", options={"default": "ROLE_USER"})
-     */
-    private array $roles = [];
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups("user_info")]
+    private ?\DateTimeInterface $bornOn;
 
-    /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-     */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups("user_info")]
+    private ?string $avatar;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[Groups("user_info")]
     private \DateTimeInterface $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-     */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[Groups("user_info")]
     private \DateTimeInterface $updatedAt;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups("user_info")]
     private ?\DateTimeInterface $deletedAt = null;
+
+    #[ORM\OneToMany(mappedBy: Address::RELATION_USER, targetEntity: Address::class)]
+    #[Groups("user_info")]
+    public Collection $addresses;
+
+    #[ORM\OneToMany(mappedBy: Role::RELATION_USER, targetEntity: Role::class)]
+    #[Groups("user_info")]
+    public Collection $roles;
+
+    #[ORM\OneToMany(mappedBy: Skill::RELATION_USER, targetEntity: Skill::class)]
+    #[Groups("user_info")]
+    public Collection $skills;
+
+    #[ORM\OneToMany(mappedBy: Interest::RELATION_USER, targetEntity: Interest::class)]
+    #[Groups("user_info")]
+    public Collection $interests;
 
     public function __construct()
     {
-        // Domyślnie nadajemy rolę ROLE_USER przy tworzeniu użytkownika
-        $this->roles[] = 'ROLE_USER';
+        $this->{self::RELATION_ADDRESSES} = new ArrayCollection();
+        $this->{self::RELATION_ROLES} = new ArrayCollection();
+        $this->{self::RELATION_SKILLS} = new ArrayCollection();
+        $this->{self::RELATION_INTERESTS} = new ArrayCollection();
     }
-
-    // Implementacja metod interfejsu UserInterface (getRoles, getPassword, getUsername, isAccountNonExpired itp.)
-    // Gettery i settery dla wszystkich pól
 
     public function getUuid(): UuidInterface
     {
-        return $this->uuid;
+        return $this->{self::COLUMN_UUID};
     }
 
     public function getFirstName(): string
     {
-        return $this->firstName;
+        return $this->{self::COLUMN_FIRST_NAME};
     }
 
     public function getLastName(): string
     {
-        return $this->lastName;
+        return $this->{self::COLUMN_LAST_NAME};
     }
 
     public function getEmail(): string
     {
-        return $this->email;
+        return $this->{self::COLUMN_EMAIL};
     }
 
     public function getPhone(): ?string
     {
-        return $this->phone;
+        return $this->{self::COLUMN_PHONE};
     }
 
     public function getPassword(): string
     {
-        return $this->password;
+        return $this->{self::COLUMN_PASSWORD};
     }
 
     public function getActive(): bool
     {
-        return $this->active;
+        return $this->{self::COLUMN_ACTIVE};
+    }
+
+    public function getBornOn(): \DateTimeInterface
+    {
+        return $this->{self::COLUMN_BORN_ON};
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->{self::COLUMN_AVATAR};
     }
 
     public function getCreatedAt(): \DateTimeInterface
     {
-        return $this->createdAt;
+        return $this->{self::COLUMN_CREATED_AT};
     }
 
     public function getUpdatedAt(): \DateTimeInterface
     {
-        return $this->updatedAt;
+        return $this->{self::COLUMN_UPDATED_AT};
     }
 
     public function getDeletedAt(): ?\DateTimeInterface
     {
-        return $this->deletedAt;
-    }
-
-    public function setUUID(UuidInterface $uuid): void
-    {
-        $this->uuid = $uuid;
-    }
-
-    public function setFirstName(string $firstName): void
-    {
-        $this->firstName = $firstName;
-    }
-
-    public function setLastName(string $lastName): void
-    {
-        $this->lastName = $lastName;
-    }
-
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
-    }
-
-    public function setPhone(?string $phone): void
-    {
-        $this->phone = $phone;
-    }
-
-    public function setPassword(string $password, UserPasswordHasherInterface $passwordHasher): void
-    {
-        $this->password = $passwordHasher->hashPassword($this, $password);
-    }
-
-    public function setActive(bool $active): void
-    {
-        $this->active = $active;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
-
-    public function setDeletedAt(?\DateTimeInterface $deletedAt): void
-    {
-        $this->deletedAt = $deletedAt;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function setCreatedAtValue(): void
-    {
-        $this->createdAt = new \DateTime();
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function setUpdatedAtValue(): void
-    {
-        $this->updatedAt = new \DateTime();
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
+        return $this->{self::COLUMN_DELETED_AT};
     }
 
     public function getRoles(): array
     {
-        $roles = $this->roles ?? [];
+        $arrayOfRolesNames = [];
+        foreach ($this->{self::RELATION_ROLES}->toArray() as $role) {
+            $arrayOfRolesNames[] = $role->getName();
+        }
 
-        return array_unique($roles);
+        return $arrayOfRolesNames;
+    }
+
+    public function getSkills(): array
+    {
+        $arrayOfSkillsNames = [];
+        foreach ($this->{self::RELATION_SKILLS}->toArray() as $skill) {
+            $arrayOfSkillsNames[] = $skill->getName();
+        }
+
+        return $arrayOfSkillsNames;
+    }
+
+    public function getInterests(): array
+    {
+        $arrayOfInterestsNames = [];
+        foreach ($this->{self::RELATION_INTERESTS}->toArray() as $interest) {
+            $arrayOfInterestsNames[] = $interest->getName();
+        }
+
+        return $arrayOfInterestsNames;
+    }
+
+    public function getAddressesEntities(): Collection
+    {
+        return $this->{self::RELATION_ADDRESSES};
+    }
+
+    public function getRolesEntities(): Collection
+    {
+        return $this->{self::RELATION_ROLES};
+    }
+
+    public function getSkillsEntities(): Collection
+    {
+        return $this->{self::RELATION_SKILLS};
+    }
+
+    public function getInterestsEntities(): Collection
+    {
+        return $this->{self::RELATION_INTERESTS};
+    }
+
+    public function setUUID(UuidInterface $uuid): void
+    {
+        $this->{self::COLUMN_UUID} = $uuid;
+    }
+
+    public function setFirstName(string $firstName): void
+    {
+        $this->{self::COLUMN_FIRST_NAME} = $firstName;
+    }
+
+    public function setLastName(string $lastName): void
+    {
+        $this->{self::COLUMN_LAST_NAME} = $lastName;
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->{self::COLUMN_EMAIL} = $email;
+    }
+
+    public function setPhone(?string $phone): void
+    {
+        $this->{self::COLUMN_PHONE} = $phone;
+    }
+
+    public function setPassword(string $password, UserPasswordHasherInterface $passwordHasher): void
+    {
+        $this->{self::COLUMN_PASSWORD} = $passwordHasher->hashPassword($this, $password);
+    }
+
+    public function setActive(bool $active): void
+    {
+        $this->{self::COLUMN_ACTIVE} = $active;
+    }
+
+    public function setBornOn(?\DateTimeInterface $bornOn): void
+    {
+        $this->{self::COLUMN_BORN_ON} = $bornOn;
+    }
+
+    public function setAvatar(?string $avatar): void
+    {
+        $this->{self::COLUMN_AVATAR} = $avatar;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): void
+    {
+        $this->{self::COLUMN_CREATED_AT} = $createdAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
+    {
+        $this->{self::COLUMN_UPDATED_AT} = $updatedAt;
+    }
+
+    public function setDeletedAt(?\DateTimeInterface $deletedAt): void
+    {
+        $this->{self::COLUMN_DELETED_AT} = $deletedAt;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->{self::COLUMN_CREATED_AT} = new \DateTime();
+    }
+
+    #[ORM\PrePersist]
+    public function setUpdatedAtValue(): void
+    {
+        $this->{self::COLUMN_UPDATED_AT} = new \DateTime();
     }
 
     public function getSalt(): ?string
@@ -245,9 +314,6 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return null;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
@@ -256,12 +322,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     public function getUserIdentifier(): string
     {
-        return (string) $this->{self::COLUMN_UUID};
-    }
-
-    public function hasRole(string $roleToCheck): bool
-    {
-        return in_array($roleToCheck, $this->roles);
+        return $this->getUuid()->__toString();
     }
 
     public static function getAttributes(): array

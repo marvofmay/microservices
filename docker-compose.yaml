@@ -1,5 +1,14 @@
 version: '3.8'
 
+volumes:
+  mysql-data-service-user:
+    driver: local
+  mysql-data-service-movie:
+    driver: local    
+  mysql-data-service-order:
+    driver: local       
+  mysql-data-service-invoice:
+    driver: local           
 services:
   service-user:
     container_name: service-user
@@ -24,7 +33,31 @@ services:
       - ./service-movie/src:/var/www/html
     depends_on:
       - service-movie-db
-
+      
+  service-order:
+    container_name: service-order
+    build:
+      context: ./service-order
+      dockerfile: Dockerfile
+    ports:
+      - "82:80"  # Mapuj port 80 z kontenera na port 82 hosta
+    volumes:
+      - ./service-order/src:/var/www/html
+    depends_on:
+      - service-order-db      
+      
+  service-invoice:
+    container_name: service-invoice
+    build:
+      context: ./service-invoice
+      dockerfile: Dockerfile
+    ports:
+      - "83:80"  # Mapuj port 80 z kontenera na port 83 hosta
+    volumes:
+      - ./service-invoice/src:/var/www/html
+    depends_on:
+      - service-invoice-db      
+      
   service-user-db:
     container_name: service-user-db
     image: mysql
@@ -34,15 +67,9 @@ services:
       MYSQL_DATABASE: service_user
       MYSQL_USER: user
       MYSQL_PASSWORD: password
+    volumes:
+      - mysql-data-service-user:/var/lib/mysql       
       
-  phpmyadmin-user:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin-user
-    ports:
-      - "8080:80"
-    environment:
-      PMA_HOST: service-user-db
-
   service-movie-db:
     container_name: service-movie-db
     image: mysql
@@ -52,7 +79,41 @@ services:
       MYSQL_DATABASE: service_movie
       MYSQL_USER: user
       MYSQL_PASSWORD: password
+    volumes:
+      - mysql-data-service-movie:/var/lib/mysql   
       
+  service-order-db:
+    container_name: service-order-db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: service_order
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql-data-service-order:/var/lib/mysql       
+      
+  service-invoice-db:
+    container_name: service-invoice-db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: service_invoice
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql-data-service-invoice:/var/lib/mysql              
+      
+  phpmyadmin-user:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-user
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: service-user-db
+
   phpmyadmin-movie:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin-movie
@@ -61,6 +122,22 @@ services:
     environment:
       PMA_HOST: service-movie-db    
       
+  phpmyadmin-order:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-order
+    ports:
+      - "8082:80"
+    environment:
+      PMA_HOST: service-order-db
+      
+  phpmyadmin-invoice:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-invoice
+    ports:
+      - "8083:80"
+    environment:
+      PMA_HOST: service-invoice-db
+           
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq

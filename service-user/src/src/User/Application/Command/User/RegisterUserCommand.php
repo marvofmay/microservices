@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\User\Application\Command\User;
+
+use App\User\Structure\UserRole\User;
 
 class RegisterUserCommand
 {
@@ -12,8 +16,15 @@ class RegisterUserCommand
     public bool $active;
     public array $roles;
 
-    public function __construct(string $firstName, string $lastName, string $email, string $phone, string $password, bool $active, array $roles)
-    {
+    public function __construct(
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $phone,
+        string $password,
+        bool $active = true,
+        array $roles = [User::ROLE_USER_VALUE]
+    ) {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;

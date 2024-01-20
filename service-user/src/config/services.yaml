@@ -23,10 +23,12 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Category\Presentation\API\CategoryController:
-        tags: ['controller.service_arguments']
-    App\User\Presentation\API\UserController:
-        tags: ['controller.service_arguments']
+
+    #App\Category\Presentation\API\CategoryController:
+        #tags: ['controller.service_arguments']
+    #App\User\Presentation\API\UserController:
+        #tags: ['controller.service_arguments']
+
     App\Repository\UserReaderRepository:
         factory: ['@doctrine.orm.entity_manager', getRepository]
         arguments:
@@ -44,3 +46,34 @@ services:
     App\User\Application\CommandHandler\User\DeleteUserCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\User\Application\CommandHandler\User\RestoreDeletedUserCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\User\Application\CommandHandler\User\ToggleActiveCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\User\Application\CommandHandler\User\UploadUserAvatarCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\User\Application\CommandHandler\User\ChangeUserPasswordCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\User\Application\CommandHandler\SelectOption\CreateSelectOptionCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\User\Application\CommandHandler\SelectOption\UpdateSelectOptionCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\User\Application\CommandHandler\SelectOption\DeleteSelectOptionCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\User\Application\CommandHandler\SelectOption\RestoreDeletedSelectOptionCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+
+    gedmo.listener.softdeleteable:
+        class: Gedmo\SoftDeleteable\SoftDeleteableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
