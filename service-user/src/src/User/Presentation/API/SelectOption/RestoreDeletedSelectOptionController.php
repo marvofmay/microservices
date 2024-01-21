@@ -27,7 +27,7 @@ class RestoreDeletedSelectOptionController extends AbstractController
 
             return $this->json(['message' => 'Select option has been restored.'], Response::HTTP_OK);
         } catch (\Exception $e) {
-            $this->logger->error('trying user restore: ' .  $e->getMessage());
+            $this->logger->error('trying restore select option: ' .  $e->getMessage());
 
             return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/select-options/kinds', name: 'api.select-options-kinds.')]
+#[Route('/api/select-options/kinds', name: 'api.select-options-list-kinds.')]
 class ListSelectOptionKindController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly SelectOptionReaderRepository $selectOptionReaderRepository)

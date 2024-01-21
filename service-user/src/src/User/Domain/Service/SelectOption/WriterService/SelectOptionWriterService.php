@@ -3,7 +3,7 @@
 namespace App\User\Domain\Service\SelectOption\WriterService;
 
 use App\User\Domain\Entity\SelectOption;
-use App\User\Domain\Repository\SelectOption\SelectOptionWriterRepository;
+use App\User\Domain\Repository\SelectOption\WriterRepository\SelectOptionWriterRepository;
 
 class SelectOptionWriterService
 {

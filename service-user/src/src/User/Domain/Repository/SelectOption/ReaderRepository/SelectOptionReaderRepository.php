@@ -19,7 +19,7 @@ class SelectOptionReaderRepository extends ServiceEntityRepository
 
     public function getSelectOptionByUUID(string $uuid): ?SelectOption
     {
-        $user = $this->getEntityManager()
+        $selectOption = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('so')
             ->from(SelectOption::class, 'so')
@@ -28,25 +28,11 @@ class SelectOptionReaderRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 
-        if (!$user) {
+        if (! $selectOption) {
             throw new NotFindByUUIDException('Select option not found by uuid: ' . $uuid);
         }
 
-        return $user;
-    }
-
-    public function getSelectOptions()
-    {
-        $selectOptions = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->getQuery()
-            ->getResult();
-
-        if (! $selectOptions) {
-            throw new NotExistsException('Select options not exists.');
-        }
-
-        return $selectOptions;
+        return $selectOption;
     }
 
     public function getSelectOptionsKinds()

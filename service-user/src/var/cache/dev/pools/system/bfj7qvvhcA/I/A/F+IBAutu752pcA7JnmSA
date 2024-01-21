@@ -1,0 +1,3 @@
+<?php //App%255CUser%255CDomain%255CEntity%255CSelectOptionKind%2524uuid
+
+return [PHP_INT_MAX, []];

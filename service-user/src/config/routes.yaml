@@ -18,6 +18,11 @@ select_option_controllers:
         path: ../src/User/Presentation/API/SelectOption
         namespace: App\User\Presentation\API\SelectOption
     type: annotation
+select_option_kind_controllers:
+    resource:
+        path: ../src/User/Presentation/API/SelectOptionKind
+        namespace: App\User\Presentation\API\SelectOptionKind
+    type: annotation
 api_login_check:
     path: /api/login_check
 

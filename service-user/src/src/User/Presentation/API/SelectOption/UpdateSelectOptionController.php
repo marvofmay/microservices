@@ -5,8 +5,6 @@ declare(strict_types = 1);
 namespace App\User\Presentation\API\SelectOption;
 
 use App\User\Domain\Action\SelectOption\UpdateSelectOptionAction;
-use App\User\Domain\Action\User\UpdateUserAction;
-
 use App\User\Domain\DTO\SelectOption\UpdateDTO;
 use App\User\Domain\Service\SelectOption\ReaderService\SelectOptionReaderService;
 use Psr\Log\LoggerInterface;

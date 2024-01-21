@@ -70,6 +70,18 @@ services:
     App\User\Application\CommandHandler\SelectOption\RestoreDeletedSelectOptionCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\User\Application\CommandHandler\SelectOptionKind\CreateSelectOptionKindCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\User\Application\CommandHandler\SelectOptionKind\UpdateSelectOptionKindCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\User\Application\CommandHandler\SelectOptionKind\DeleteSelectOptionKindCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\User\Application\CommandHandler\SelectOptionKind\RestoreDeletedSelectOptionKindCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 
     gedmo.listener.softdeleteable:
         class: Gedmo\SoftDeleteable\SoftDeleteableListener
