@@ -1,0 +1,10 @@
+/service-user/src/var/*
+/service-user/src/vendor/*
+/service-user/.idea/*
+/service-user/src/
+
+/service-movie/src/var/*
+/service-movie/src/vendor/*
+/service-movie/.idea/*
+/service-movie/src/
+
