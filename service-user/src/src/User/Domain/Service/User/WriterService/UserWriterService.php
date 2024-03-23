@@ -3,16 +3,11 @@
 namespace App\User\Domain\Service\User\WriterService;
 
 use App\User\Domain\Entity\User;
-use App\User\Domain\Repository\User\WriterRepository\UserWriterRepository;
+use App\User\Domain\Interface\UserWriterInterface;
 
 class UserWriterService
 {
-    private UserWriterRepository $userWriterRepository;
-
-    public function __construct(UserWriterRepository $userWriterRepository)
-    {
-        $this->userWriterRepository = $userWriterRepository;
-    }
+    public function __construct(private readonly UserWriterInterface $userWriterRepository) {}
 
     public function __toString()
     {

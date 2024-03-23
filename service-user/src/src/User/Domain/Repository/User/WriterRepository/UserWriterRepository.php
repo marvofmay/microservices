@@ -7,8 +7,9 @@ namespace App\User\Domain\Repository\User\WriterRepository;
 use App\User\Domain\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\User\Domain\Interface\UserWriterInterface;
 
-class UserWriterRepository extends ServiceEntityRepository
+class UserWriterRepository extends ServiceEntityRepository implements UserWriterInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -18,25 +19,34 @@ class UserWriterRepository extends ServiceEntityRepository
     public function saveUserInDB(
         User $user,
         array $roles,
-        array $addresses,
-        array $skills,
-        array $interests
+        array $addresses = [],
+        array $skills = [],
+        array $interests = []
     ): User
     {
-        $this->getEntityManager()->persist($user);
-        foreach ($roles as $role) {
-            $this->getEntityManager()->persist($role);
+        $entityManager = $this->getEntityManager();
+        $entityManager->beginTransaction();
+        try {
+            $entityManager->persist($user);
+            foreach ($roles as $role) {
+                $entityManager->persist($role);
+            }
+            foreach ($addresses as $address) {
+                $entityManager->persist($address);
+            }
+            foreach ($skills as $skill) {
+                $entityManager->persist($skill);
+            }
+            foreach ($interests as $interest) {
+                $entityManager->persist($interest);
+            }
+            $entityManager->flush();
+            $entityManager->commit();
+        } catch (\Exception $e) {
+            $entityManager->rollback();
+
+            throw $e;
         }
-        foreach ($addresses as $address) {
-            $this->getEntityManager()->persist($address);
-        }
-        foreach ($skills as $skill) {
-            $this->getEntityManager()->persist($skill);
-        }
-        foreach ($interests as $interest) {
-            $this->getEntityManager()->persist($interest);
-        }
-        $this->getEntityManager()->flush();
 
         return $user;
     }
@@ -49,7 +59,6 @@ class UserWriterRepository extends ServiceEntityRepository
         array $interests
     ): User
     {
-
         $this->getEntityManager()->persist($user);
         if (! empty($roles)) {
             $currentRoles = $user->getRolesEntities();

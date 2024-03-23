@@ -19,6 +19,7 @@
       <parameter key="LexikJWTAuthenticationBundle">Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle</parameter>
       <parameter key="NelmioCorsBundle">Nelmio\CorsBundle\NelmioCorsBundle</parameter>
       <parameter key="RequestDtoBundle">Prugala\RequestDto\RequestDtoBundle</parameter>
+      <parameter key="DebugBundle">Symfony\Bundle\DebugBundle\DebugBundle</parameter>
     </parameter>
     <parameter key="kernel.bundles_metadata" type="collection">
       <parameter key="FrameworkBundle" type="collection">
@@ -60,6 +61,10 @@
       <parameter key="RequestDtoBundle" type="collection">
         <parameter key="path">/var/www/html/vendor/prugala/symfony-request-dto/src</parameter>
         <parameter key="namespace">Prugala\RequestDto</parameter>
+      </parameter>
+      <parameter key="DebugBundle" type="collection">
+        <parameter key="path">/var/www/html/vendor/symfony/debug-bundle</parameter>
+        <parameter key="namespace">Symfony\Bundle\DebugBundle</parameter>
       </parameter>
     </parameter>
     <parameter key="kernel.charset">UTF-8</parameter>
@@ -273,6 +278,7 @@
     <parameter key="nelmio_cors.cors_listener.class">Nelmio\CorsBundle\EventListener\CorsListener</parameter>
     <parameter key="nelmio_cors.options_resolver.class">Nelmio\CorsBundle\Options\Resolver</parameter>
     <parameter key="nelmio_cors.options_provider.config.class">Nelmio\CorsBundle\Options\ConfigProvider</parameter>
+    <parameter key="env(VAR_DUMPER_SERVER)">127.0.0.1:9912</parameter>
     <parameter key="console.command.ids" type="collection"/>
   </parameters>
   <services>
@@ -388,6 +394,7 @@
       <tag name="messenger.message_handler" bus="messenger.bus.default"/>
       <argument type="service" id="App\User\Domain\Service\User\WriterService\UserWriterService"/>
       <argument type="service" id="security.user_password_hasher"/>
+      <argument type="service" id="App\User\Domain\Entity\User"/>
     </service>
     <service id="App\User\Application\CommandHandler\User\RestoreDeletedUserCommandHandler" class="App\User\Application\CommandHandler\User\RestoreDeletedUserCommandHandler" autowire="true" autoconfigure="true">
       <tag name="messenger.message_handler" bus="messenger.bus.default"/>
@@ -695,7 +702,6 @@
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
       <argument type="service" id="monolog.logger"/>
-      <argument type="service" id="security.user_password_hasher"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.O2p6Lk7.App\User\Presentation\API\User\RegisterUserController"/>
       </call>
@@ -2364,6 +2370,14 @@
         <argument>0</argument>
       </call>
       <call method="addListener">
+        <argument>console.command</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="debug.dump_listener"/>
+          <argument>configure</argument>
+        </argument>
+        <argument>1024</argument>
+      </call>
+      <call method="addListener">
         <argument>Symfony\Component\Security\Http\Event\CheckPassportEvent</argument>
         <argument type="collection">
           <argument type="service_closure" id="security.listener.csrf_protection"/>
@@ -2892,6 +2906,9 @@
     <service id="twig.runtime.security_csrf" class="Symfony\Bridge\Twig\Extension\CsrfRuntime">
       <tag name="twig.runtime"/>
       <argument type="service" id="security.csrf.token_manager"/>
+    </service>
+    <service id="twig.extension.security_csrf" class="Symfony\Bridge\Twig\Extension\CsrfExtension">
+      <tag name="twig.extension"/>
     </service>
     <service id="validator" class="Symfony\Component\Validator\Validator\ValidatorInterface">
       <factory service="validator.builder" method="getValidator"/>
@@ -5375,6 +5392,123 @@
       <argument type="service" id="property_info"/>
       <argument type="service" id="serializer.mapping.class_discriminator_resolver"/>
     </service>
+    <service id="twig.extension.dump" class="Symfony\Bridge\Twig\Extension\DumpExtension">
+      <tag name="twig.extension"/>
+      <argument type="service" id="var_dumper.cloner"/>
+      <argument type="service" id="var_dumper.html_dumper"/>
+    </service>
+    <service id="data_collector.dump" class="Symfony\Component\HttpKernel\DataCollector\DumpDataCollector" public="true">
+      <tag name="data_collector" id="dump" template="@Debug/Profiler/dump.html.twig" priority="240"/>
+      <argument type="service" id="debug.stopwatch" on-invalid="ignore"/>
+      <argument type="service" id="debug.file_link_formatter" on-invalid="ignore"/>
+      <argument>UTF-8</argument>
+      <argument>null</argument>
+      <argument type="service" id="var_dumper.server_connection"/>
+    </service>
+    <service id="debug.dump_listener" class="Symfony\Component\HttpKernel\EventListener\DumpListener">
+      <tag name="kernel.event_subscriber"/>
+      <tag name="container.no_preload"/>
+      <argument type="service" id="var_dumper.cloner"/>
+      <argument type="service" id="var_dumper.contextualized_cli_dumper"/>
+      <argument type="service" id="var_dumper.server_connection"/>
+    </service>
+    <service id="var_dumper.cloner" class="Symfony\Component\VarDumper\Cloner\VarCloner" public="true">
+      <call method="setMaxItems">
+        <argument>2500</argument>
+      </call>
+      <call method="setMinDepth">
+        <argument>1</argument>
+      </call>
+      <call method="setMaxString">
+        <argument>-1</argument>
+      </call>
+      <call method="addCasters">
+        <argument type="collection">
+          <argument key="Closure">Symfony\Component\VarDumper\Caster\ReflectionCaster::unsetClosureFileInfo</argument>
+        </argument>
+      </call>
+    </service>
+    <service id="var_dumper.contextualized_cli_dumper" class="Symfony\Component\VarDumper\Dumper\ContextualizedDumper">
+      <tag name="container.decorator" id="var_dumper.cli_dumper" inner="var_dumper.contextualized_cli_dumper.inner"/>
+      <argument type="service" id="var_dumper.contextualized_cli_dumper.inner"/>
+      <argument type="collection">
+        <argument key="source" type="service">
+          <service class="Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider">
+            <argument>UTF-8</argument>
+            <argument>/var/www/html</argument>
+            <argument type="service" id="debug.file_link_formatter" on-invalid="null"/>
+          </service>
+        </argument>
+      </argument>
+    </service>
+    <service id="var_dumper.html_dumper" class="Symfony\Component\VarDumper\Dumper\HtmlDumper">
+      <argument>null</argument>
+      <argument>UTF-8</argument>
+      <argument>0</argument>
+      <call method="setDisplayOptions">
+        <argument type="collection">
+          <argument key="fileLinkFormat" type="service" id="debug.file_link_formatter" on-invalid="ignore"/>
+        </argument>
+      </call>
+    </service>
+    <service id="var_dumper.server_connection" class="Symfony\Component\VarDumper\Server\Connection">
+      <argument>tcp://%env(VAR_DUMPER_SERVER)%</argument>
+      <argument type="collection">
+        <argument key="source" type="service">
+          <service class="Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider">
+            <argument>UTF-8</argument>
+            <argument>/var/www/html</argument>
+            <argument type="service" id="debug.file_link_formatter" on-invalid="null"/>
+          </service>
+        </argument>
+        <argument key="request" type="service">
+          <service class="Symfony\Component\VarDumper\Dumper\ContextProvider\RequestContextProvider">
+            <argument type="service" id="request_stack"/>
+          </service>
+        </argument>
+        <argument key="cli" type="service">
+          <service class="Symfony\Component\VarDumper\Dumper\ContextProvider\CliContextProvider"/>
+        </argument>
+      </argument>
+    </service>
+    <service id="var_dumper.dump_server" class="Symfony\Component\VarDumper\Server\DumpServer">
+      <tag name="monolog.logger" channel="debug"/>
+      <argument>tcp://%env(VAR_DUMPER_SERVER)%</argument>
+      <argument type="service" id="monolog.logger.debug" on-invalid="null"/>
+    </service>
+    <service id="var_dumper.command.server_dump" class="Symfony\Component\VarDumper\Command\ServerDumpCommand">
+      <tag name="console.command"/>
+      <tag name="container.no_preload"/>
+      <argument type="service" id="var_dumper.dump_server"/>
+      <argument type="collection">
+        <argument key="cli" type="service">
+          <service class="Symfony\Component\VarDumper\Command\Descriptor\CliDescriptor">
+            <argument type="service" id="var_dumper.contextualized_cli_dumper.inner"/>
+          </service>
+        </argument>
+        <argument key="html" type="service">
+          <service class="Symfony\Component\VarDumper\Command\Descriptor\HtmlDescriptor">
+            <argument type="service" id="var_dumper.html_dumper"/>
+          </service>
+        </argument>
+      </argument>
+      <call method="setName">
+        <argument>server:dump</argument>
+      </call>
+      <call method="setDescription">
+        <argument>Start a dump server that collects and displays dumps in a single place</argument>
+      </call>
+    </service>
+    <service id="monolog.command.server_log" class="Symfony\Bridge\Monolog\Command\ServerLogCommand">
+      <tag name="console.command"/>
+      <tag name="container.no_preload"/>
+      <call method="setName">
+        <argument>server:log</argument>
+      </call>
+      <call method="setDescription">
+        <argument>Start a log server that displays logs in real time</argument>
+      </call>
+    </service>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\User\Domain\DataFixtures\UserFixtures" class="App\User\Domain\DataFixtures\UserFixtures" autowire="true" abstract="true"/>
@@ -6423,6 +6557,15 @@
         <argument type="service" id="monolog.handler.main"/>
       </call>
     </service>
+    <service id="monolog.logger.debug" class="Symfony\Bridge\Monolog\Logger">
+      <argument>debug</argument>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.console"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.main"/>
+      </call>
+    </service>
     <service id="monolog.logger.deprecation" class="Symfony\Bridge\Monolog\Logger" public="true">
       <argument>deprecation</argument>
       <call method="pushHandler">
@@ -6936,6 +7079,16 @@
     <service id="debug.security.firewall.authenticator.main.inner" class="Symfony\Component\Security\Http\Firewall\AuthenticatorManagerListener">
       <argument type="service" id="security.authenticator.manager.main"/>
     </service>
+    <service id="var_dumper.contextualized_cli_dumper.inner" class="Symfony\Component\VarDumper\Dumper\CliDumper">
+      <argument>null</argument>
+      <argument>UTF-8</argument>
+      <argument>0</argument>
+      <call method="setDisplayOptions">
+        <argument type="collection">
+          <argument key="fileLinkFormat" type="service" id="debug.file_link_formatter" on-invalid="ignore"/>
+        </argument>
+      </call>
+    </service>
     <service id=".doctrine.orm.default_metadata_driver.inner" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain">
       <call method="addDriver">
         <argument type="service" id="doctrine.orm.default_attribute_metadata_driver"/>
@@ -7211,6 +7364,20 @@
       <argument>false</argument>
       <argument type="service_closure" id="lexik_jwt_authentication.generate_keypair_command"/>
     </service>
+    <service id=".var_dumper.command.server_dump.lazy" class="Symfony\Component\Console\Command\LazyCommand">
+      <argument>server:dump</argument>
+      <argument type="collection"/>
+      <argument>Start a dump server that collects and displays dumps in a single place</argument>
+      <argument>false</argument>
+      <argument type="service_closure" id="var_dumper.command.server_dump"/>
+    </service>
+    <service id=".monolog.command.server_log.lazy" class="Symfony\Component\Console\Command\LazyCommand">
+      <argument>server:log</argument>
+      <argument type="collection"/>
+      <argument>Start a log server that displays logs in real time</argument>
+      <argument>false</argument>
+      <argument type="service_closure" id="monolog.command.server_log"/>
+    </service>
     <service id=".maker.auto_command.make_auth.lazy" class="Symfony\Component\Console\Command\LazyCommand">
       <argument>make:auth</argument>
       <argument type="collection"/>
@@ -7384,7 +7551,7 @@
     </service>
     <service id="console.command_loader" class="Symfony\Component\Console\CommandLoader\ContainerCommandLoader" public="true">
       <tag name="container.no_preload"/>
-      <argument type="service" id=".service_locator.C0H9ExM"/>
+      <argument type="service" id=".service_locator.nMVnbx7"/>
       <argument type="collection">
         <argument key="about">console.command.about</argument>
         <argument key="assets:install">console.command.assets_install</argument>
@@ -7456,6 +7623,8 @@
         <argument key="lexik:jwt:check-config">lexik_jwt_authentication.check_config_command</argument>
         <argument key="lexik:jwt:generate-token">lexik_jwt_authentication.generate_token_command</argument>
         <argument key="lexik:jwt:generate-keypair">lexik_jwt_authentication.generate_keypair_command</argument>
+        <argument key="server:dump">var_dumper.command.server_dump</argument>
+        <argument key="server:log">monolog.command.server_log</argument>
         <argument key="make:auth">maker.auto_command.make_auth</argument>
         <argument key="make:command">maker.auto_command.make_command</argument>
         <argument key="make:twig-component">maker.auto_command.make_twig_component</argument>
@@ -7484,7 +7653,7 @@
         <argument key="make:security:form-login">maker.auto_command.make_security_form_login</argument>
       </argument>
     </service>
-    <service id=".service_locator.C0H9ExM" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.nMVnbx7" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="console.command.about" type="service_closure" id=".console.command.about.lazy"/>
@@ -7557,6 +7726,8 @@
         <argument key="lexik_jwt_authentication.check_config_command" type="service_closure" id=".lexik_jwt_authentication.check_config_command.lazy"/>
         <argument key="lexik_jwt_authentication.generate_token_command" type="service_closure" id=".lexik_jwt_authentication.generate_token_command.lazy"/>
         <argument key="lexik_jwt_authentication.generate_keypair_command" type="service_closure" id=".lexik_jwt_authentication.generate_keypair_command.lazy"/>
+        <argument key="var_dumper.command.server_dump" type="service_closure" id=".var_dumper.command.server_dump.lazy"/>
+        <argument key="monolog.command.server_log" type="service_closure" id=".monolog.command.server_log.lazy"/>
         <argument key="maker.auto_command.make_auth" type="service_closure" id=".maker.auto_command.make_auth.lazy"/>
         <argument key="maker.auto_command.make_command" type="service_closure" id=".maker.auto_command.make_command.lazy"/>
         <argument key="maker.auto_command.make_twig_component" type="service_closure" id=".maker.auto_command.make_twig_component.lazy"/>
@@ -7583,6 +7754,7 @@
         <argument key="maker.auto_command.make_security_form_login" type="service_closure" id=".maker.auto_command.make_security_form_login.lazy"/>
       </argument>
     </service>
+    <service id="App\User\Domain\Interface\UserWriterInterface" alias="App\User\Domain\Repository\User\WriterRepository\UserWriterRepository"/>
     <service id="App\Kernel" alias="kernel" public="true"/>
     <service id="Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface" alias="parameter_bag"/>
     <service id="Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface" alias="parameter_bag"/>
@@ -7731,6 +7903,7 @@
     <service id="Psr\Log\LoggerInterface $routerLogger" alias="monolog.logger.router"/>
     <service id="Psr\Log\LoggerInterface $doctrineLogger" alias="monolog.logger.doctrine"/>
     <service id="Psr\Log\LoggerInterface $securityLogger" alias="monolog.logger.security"/>
+    <service id="Psr\Log\LoggerInterface $debugLogger" alias="monolog.logger.debug"/>
     <service id="Psr\Log\LoggerInterface $deprecationLogger" alias="monolog.logger.deprecation"/>
     <service id=".service_locator.Xbsa8iG" alias="messenger.retry_strategy_locator"/>
     <service id=".service_locator.k3s3K.2" alias=".service_locator.dsdSIIc"/>
@@ -7750,6 +7923,7 @@
     <service id="security.firewall.authenticator.login" alias="debug.security.firewall.authenticator.login"/>
     <service id="security.firewall.authenticator.api" alias="debug.security.firewall.authenticator.api"/>
     <service id="security.firewall.authenticator.main" alias="debug.security.firewall.authenticator.main"/>
+    <service id="var_dumper.cli_dumper" alias="var_dumper.contextualized_cli_dumper"/>
     <service id="doctrine.orm.default_metadata_driver" alias=".doctrine.orm.default_metadata_driver"/>
     <service id="security.event_dispatcher.login" alias="debug.security.event_dispatcher.login"/>
     <service id="security.event_dispatcher.api" alias="debug.security.event_dispatcher.api"/>

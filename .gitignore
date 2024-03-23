@@ -1,10 +1,10 @@
-/service-user/src/var/*
-/service-user/src/vendor/*
-/service-user/.idea/*
-/service-user/src/
+# Ignoruj katalogi var i vendor w każdym projekcie
+*/src/var/
+*/src/vendor/
 
-/service-movie/src/var/*
-/service-movie/src/vendor/*
-/service-movie/.idea/*
-/service-movie/src/
+# Ignoruj katalogi .idea we wszystkich projektach
+*/.idea/
 
+# Ignoruj pliki/foldery wygenerowane przez Composer
+/vendor/
+/composer.lock

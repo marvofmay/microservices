@@ -12,29 +12,22 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RegisterUserCommandHandler
 {
-    private UserWriterService $userWriterService;
-    private UserPasswordHasherInterface $userPasswordInterface;
-
-    private User $user;
-    private array $roles;
-
-    public function __construct(UserWriterService $userWriterService, UserPasswordHasherInterface $userPasswordInterface)
-    {
-        $this->userWriterService = $userWriterService;
-        $this->userPasswordInterface = $userPasswordInterface;
-    }
+    public function __construct(
+        private readonly UserWriterService $userWriterService,
+        private readonly UserPasswordHasherInterface $userPasswordInterface,
+        private readonly User $user,
+        private array $roles = []
+    ) {}
 
     public function __invoke(RegisterUserCommand $command): void
     {
         $this->setUser($command);
         $this->setRoles($command);
-
         $this->userWriterService->saveUserInDB($this->user, $this->roles);
     }
 
     private function setUser(RegisterUserCommand $command): void
     {
-        $this->user = new User();
         $this->user->setFirstName($command->{User::COLUMN_FIRST_NAME});
         $this->user->setLastName($command->{User::COLUMN_LAST_NAME});
         $this->user->setPhone($command->{User::COLUMN_PHONE});
