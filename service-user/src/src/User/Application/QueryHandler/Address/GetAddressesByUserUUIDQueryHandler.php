@@ -10,17 +10,11 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class GetAddressesByUserUUIDQueryHandler
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
+    public function __construct(private readonly EntityManagerInterface $entityManager) {}
 
     public function handle(GetAddressesByUserUUIDQuery $query): array
     {
         $userUUID = $query->getUserUUID();
-
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select(
                 'a.' . Address::COLUMN_UUID,

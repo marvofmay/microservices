@@ -6,12 +6,7 @@ namespace App\User\Application\Query\Address;
 
 class GetAddressesByUserUUIDQuery
 {
-    private string $userUUID;
-
-    public function __construct(string $userUUID)
-    {
-        $this->userUUID = $userUUID;
-    }
+    public function __construct(private string $userUUID) {}
 
     public function getUserUUID(): string
     {
