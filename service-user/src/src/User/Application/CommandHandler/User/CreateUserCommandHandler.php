@@ -15,19 +15,15 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class CreateUserCommandHandler
 {
-    private UserWriterService $userWriterService;
-    private UserPasswordHasherInterface $userPasswordInterface;
-    private User $user;
-    private array $addresses;
-    private array $roles;
-    private array $skills;
-    private array $interests;
-
-    public function __construct(UserWriterService $userWriterService, UserPasswordHasherInterface $userPasswordInterface)
-    {
-        $this->userWriterService = $userWriterService;
-        $this->userPasswordInterface = $userPasswordInterface;
-    }
+    public function __construct(
+        private readonly UserWriterService $userWriterService,
+        private readonly UserPasswordHasherInterface $userPasswordInterface,
+        private readonly User $user,
+        private array $addresses = [],
+        private array $roles = [],
+        private array $skills = [],
+        private array $interests = [],
+    ) {}
 
     public function __invoke(CreateUserCommand $command): void
     {
@@ -48,7 +44,6 @@ class CreateUserCommandHandler
 
     private function setUser(CreateUserCommand $command): void
     {
-        $this->user = new User();
         $this->user->setFirstName($command->{User::COLUMN_FIRST_NAME});
         $this->user->setLastName($command->{User::COLUMN_LAST_NAME});
         $this->user->setPhone($command->{User::COLUMN_PHONE});
@@ -76,7 +71,6 @@ class CreateUserCommandHandler
 
     private function setRoles(CreateUserCommand $command): void
     {
-        $this->roles = [];
         foreach ($command->roles as $item) {
             $role = new Role();
             $role->setName($item);
@@ -88,7 +82,6 @@ class CreateUserCommandHandler
 
     private function setSkills(CreateUserCommand $command): void
     {
-        $this->skills = [];
         foreach ($command->skills as $item) {
             $skill = new Skill();
             $skill->setName($item);
@@ -100,7 +93,6 @@ class CreateUserCommandHandler
 
     private function setInterests(CreateUserCommand $command): void
     {
-        $this->interests = [];
         foreach ($command->interests as $item) {
             $interest = new Interest();
             $interest->setName($item);

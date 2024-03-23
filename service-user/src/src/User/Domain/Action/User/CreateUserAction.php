@@ -10,12 +10,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class CreateUserAction
 {
-    private MessageBusInterface $commandBus;
-
-    public function __construct(MessageBusInterface $commandBus)
-    {
-        $this->commandBus = $commandBus;
-    }
+    public function __construct(private readonly MessageBusInterface $commandBus) {}
 
     public function execute(CreateDTO $createDTO): void
     {

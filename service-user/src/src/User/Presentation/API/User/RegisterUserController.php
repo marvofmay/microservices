@@ -27,7 +27,7 @@ class RegisterUserController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('trying user register: ' .  $e->getMessage());
 
-            return $this->json(['errors' => 'Upss... problem with user registration'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... problem with user registration.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

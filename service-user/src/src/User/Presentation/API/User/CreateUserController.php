@@ -6,6 +6,7 @@ namespace App\User\Presentation\API\User;
 
 use App\User\Domain\Action\User\CreateUserAction;
 use App\User\Domain\DTO\User\CreateDTO;
+use Container6GDOagi\getRedirectControllerService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,17 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/users', name: 'api.users.')]
 class CreateUserController extends AbstractController
 {
-    public LoggerInterface $logger;
-    public UserPasswordHasherInterface $userPasswordInterface;
-
-    public function __construct(
-        LoggerInterface $logger,
-        UserPasswordHasherInterface $userPasswordInterface
-    )
-    {
-        $this->logger = $logger;
-        $this->userPasswordInterface = $userPasswordInterface;
-    }
+    public function __construct(private readonly LoggerInterface $logger) {}
 
     #[Route('', name: 'store', methods: ['POST'])]
     public function store(CreateDTO $createDTO, CreateUserAction $createUserAction): Response
@@ -37,7 +28,7 @@ class CreateUserController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('user created: ' .  $e->getMessage());
 
-            return $this->json(['errors' => 'Upss...'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... problem with create user.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
