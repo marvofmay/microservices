@@ -18,20 +18,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[Route('/api/users', name: 'api.users.')]
 class ListUserController extends AbstractController
 {
-    public LoggerInterface $logger;
-    public UserPasswordHasherInterface $userPasswordInterface;
-    public SerializerInterface $serializer;
-
     public function __construct(
-        LoggerInterface $logger,
-        UserPasswordHasherInterface $userPasswordInterface,
-        SerializerInterface $serializer
-    )
-    {
-        $this->logger = $logger;
-        $this->userPasswordInterface = $userPasswordInterface;
-        $this->serializer = $serializer;
-    }
+        private readonly LoggerInterface $logger,
+        private readonly SerializerInterface $serializer
+    ) {}
 
     #[Route('', name: 'list', methods: ['GET'])]
     public function index(Request $request, GetUsersQueryHandler $usersQueryHandler): Response
