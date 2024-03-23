@@ -25,11 +25,11 @@ class ChangeUserPasswordController extends AbstractController
                 $this->userReaderService->getNotDeletedUserByUUID($uuid)
             )->execute($changePasswordDTO);
 
-            return $this->json(['message' => 'User\'s  password has been changed.'], Response::HTTP_OK);
+            return $this->json(['message' => 'User\'s password has been changed.'], Response::HTTP_OK);
         } catch (\Exception $e) {
             $this->logger->error('trying user\'s password change: ' .  $e->getMessage());
 
-            return $this->json(['errors' => 'Upps... problem with user\'s password change'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... problem with user\'s password change'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

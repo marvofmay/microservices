@@ -3,15 +3,11 @@
 namespace App\User\Domain\Service\User\ReaderService;
 
 use App\User\Domain\Entity\User;
-use App\User\Domain\Repository\User\ReaderRepository\UserReaderRepository;
+use App\User\Domain\Interface\UserReaderInterface;
 
 class UserReaderService
 {
-    private UserReaderRepository $userReaderRepository;
-    public function __construct(UserReaderRepository $userReaderRepository)
-    {
-        $this->userReaderRepository = $userReaderRepository;
-    }
+    public function __construct(private readonly UserReaderInterface $userReaderRepository) {}
 
     public function getUserByUUID(string $uuid): ?User
     {

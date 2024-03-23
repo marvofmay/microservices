@@ -5,12 +5,13 @@ declare(strict_types = 1);
 namespace App\User\Domain\Repository\User\ReaderRepository;
 
 use App\User\Domain\Entity\User;
-use App\User\Domain\Exception\UserNotFindByUUIDException;
+use App\User\Domain\Exception\NotFindByUUIDException;
 use App\User\Domain\Exception\NotExistsException;
+use App\User\Domain\Interface\UserReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class UserReaderRepository extends ServiceEntityRepository
+class UserReaderRepository extends ServiceEntityRepository implements UserReaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -24,7 +25,7 @@ class UserReaderRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
 
         if (!$user) {
-            throw new UserNotFindByUUIDException('User not found by uuid: ' . $uuid);
+            throw new NotFindByUUIDException('User not found by uuid: ' . $uuid);
         }
 
         return $user;
@@ -44,17 +45,17 @@ class UserReaderRepository extends ServiceEntityRepository
         return $user;
     }
 
-    public function getUsers()
+    public function getUsers(): mixed
     {
-        $user = $this->getEntityManager()
+        $users = $this->getEntityManager()
             ->createQuery('SELECT u FROM App\User\Domain\Entity\User u ORDER BY u.createdAt')
             ->getResult();
 
-        if (!$user) {
+        if (! $users) {
             throw new NotExistsException('Users not exists.');
         }
 
-        return $user;
+        return $users;
     }
 
     public function getUserByEmail(string $email): ?User
