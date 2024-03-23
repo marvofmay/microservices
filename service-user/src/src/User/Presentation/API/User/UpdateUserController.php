@@ -15,17 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/users', name: 'api.users.')]
 class UpdateUserController extends AbstractController
 {
-    private UserReaderService $userReaderService;
-    public LoggerInterface $logger;
-
     public function __construct(
-        UserReaderService $userReaderService,
-        LoggerInterface           $logger,
-    )
-    {
-        $this->userReaderService = $userReaderService;
-        $this->logger = $logger;
-    }
+        private readonly UserReaderService $userReaderService,
+        private readonly LoggerInterface $logger,
+    ) {}
 
     #[Route('/{uuid}', name: 'update', methods: ['PUT'])]
     public function update(string $uuid, UpdateDTO $updateDTO, UpdateUserAction $updateUserAction): Response
@@ -34,7 +27,6 @@ class UpdateUserController extends AbstractController
             if ($uuid !== $updateDTO->getUUID()) {
                 return $this->json(['errors' => 'Different UUID in body raw and url'], Response::HTTP_BAD_REQUEST);
             }
-
             $updateUserAction->setUserToUpdate($this->userReaderService->getUserByUUID($uuid))
                 ->execute($updateDTO);
 
@@ -42,7 +34,7 @@ class UpdateUserController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('trying user updated: ' .  $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... problem with update user.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -11,13 +11,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class UpdateUserAction
 {
-    private MessageBusInterface $commandBus;
-    private User $user;
-
-    public function __construct(MessageBusInterface $commandBus)
-    {
-        $this->commandBus = $commandBus;
-    }
+    public function __construct(private readonly MessageBusInterface $commandBus, private User $user) {}
 
     public function setUserToUpdate(User $user): self
     {

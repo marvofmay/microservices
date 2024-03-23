@@ -1,7 +1,0 @@
-*/src/var/cache
-*/src/vendor/
-*/.idea/
-/composer.lock
-/config/jwt/*.pem
-.phpunit.result.cache
-/phpunit.xml

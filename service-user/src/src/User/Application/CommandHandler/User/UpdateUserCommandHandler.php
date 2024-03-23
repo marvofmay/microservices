@@ -14,17 +14,14 @@ use App\User\Domain\Service\User\WriterService\UserWriterService;
 
 class UpdateUserCommandHandler
 {
-    private UserWriterService $userWriterService;
-    private User $user;
-    private array $addresses;
-    private array $roles;
-    private array $skills;
-    private array $interests;
-
-    public function __construct(UserWriterService $userWriterService)
-    {
-        $this->userWriterService = $userWriterService;
-    }
+    public function __construct(
+        private readonly UserWriterService $userWriterService,
+        private User $user,
+        private array $addresses = [],
+        private array $roles = [],
+        private array $skills = [],
+        private array $interests = []
+    ) {}
 
     public function __invoke(UpdateUserCommand $command): void
     {

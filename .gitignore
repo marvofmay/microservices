@@ -1,10 +1,4 @@
-# Ignoruj katalogi var i vendor w każdym projekcie
-*/src/var/cache
+*/src/var/cache/
 */src/vendor/
-
-# Ignoruj katalogi .idea we wszystkich projektach
-*/.idea/
-
-# Ignoruj pliki/foldery wygenerowane przez Composer
-/vendor/
-/composer.lock
+*/src/.idea/
+*/src/composer.lock
