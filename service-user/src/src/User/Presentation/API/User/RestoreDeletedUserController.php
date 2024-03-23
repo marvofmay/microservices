@@ -9,26 +9,15 @@ use App\User\Domain\Service\User\ReaderService\UserReaderService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/api/users', name: 'api.users.')]
 class RestoreDeletedUserController extends AbstractController
 {
-    private UserReaderService $userReaderService;
-    public LoggerInterface $logger;
-    public UserPasswordHasherInterface $userPasswordInterface;
-
     public function __construct(
-        UserReaderService   $userReaderService,
-        LoggerInterface             $logger,
-        UserPasswordHasherInterface $userPasswordInterface
-    )
-    {
-        $this->userReaderService = $userReaderService;
-        $this->logger = $logger;
-        $this->userPasswordInterface = $userPasswordInterface;
-    }
+        private readonly UserReaderService $userReaderService,
+        private readonly LoggerInterface $logger
+    ) {}
 
     #[Route('/{uuid}/restore-deleted', name: 'restore_deleted', methods: ['PATCH'])]
     public function restoreDeleted(string $uuid, RestoreDeleteAction $restoreDeleteAction): Response

@@ -10,13 +10,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class RestoreDeleteAction
 {
-    private MessageBusInterface $commandBus;
-    private User $user;
-
-    public function __construct(MessageBusInterface $commandBus)
-    {
-        $this->commandBus = $commandBus;
-    }
+    public function __construct(private readonly MessageBusInterface $commandBus, private User $user) {}
 
     public function setUserToRestore(User $user): self
     {
