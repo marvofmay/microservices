@@ -24,7 +24,7 @@ class UserAddressesController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('get user addresses: ' . $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss.. problem with get user\'s addresses.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

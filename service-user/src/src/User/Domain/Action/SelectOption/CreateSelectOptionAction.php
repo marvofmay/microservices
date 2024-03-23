@@ -10,8 +10,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class CreateSelectOptionAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus)
-    { }
+    public function __construct(private readonly MessageBusInterface $commandBus) {}
 
     public function execute(CreateDTO $createDTO): void
     {
