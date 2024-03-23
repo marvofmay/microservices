@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace App\User\Domain\Repository\User\WriterRepository;
 
 use App\User\Domain\Entity\User;
+use App\User\Domain\Interface\User\UserWriterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use App\User\Domain\Interface\UserWriterInterface;
 
 class UserWriterRepository extends ServiceEntityRepository implements UserWriterInterface
 {

@@ -10,9 +10,7 @@ use App\User\Domain\Service\SelectOption\WriterService\SelectOptionWriterService
 
 class UpdateSelectOptionCommandHandler
 {
-    public function __construct(private readonly SelectOptionWriterService $selectOptionWriterService, private SelectOption $selectOption)
-    {
-    }
+    public function __construct(private readonly SelectOptionWriterService $selectOptionWriterService, private SelectOption $selectOption) {}
 
     public function __invoke(UpdateSelectOptionCommand $command): void
     {

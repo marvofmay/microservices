@@ -5,14 +5,14 @@ declare(strict_types = 1);
 namespace App\User\Domain\Repository\SelectOption\ReaderRepository;
 
 use App\User\Domain\Entity\SelectOption;
-use App\User\Domain\Exception\NotExistsException;
 use App\User\Domain\Exception\NotFindByUUIDException;
+use App\User\Domain\Interface\SelectOption\SelectOptionReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class SelectOptionReaderRepository extends ServiceEntityRepository
+class SelectOptionReaderRepository extends ServiceEntityRepository implements SelectOptionReaderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(private readonly ManagerRegistry $registry)
     {
         parent::__construct($registry, SelectOption::class);
     }
@@ -35,7 +35,7 @@ class SelectOptionReaderRepository extends ServiceEntityRepository
         return $selectOption;
     }
 
-    public function getSelectOptionsKinds()
+    public function getSelectOptionsKinds(): mixed
     {
         return $this->getEntityManager()
             ->createQueryBuilder()

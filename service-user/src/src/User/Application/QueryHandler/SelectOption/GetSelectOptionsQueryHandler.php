@@ -11,9 +11,7 @@ use Doctrine\ORM\QueryBuilder;
 
 class GetSelectOptionsQueryHandler
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(private readonly EntityManagerInterface $entityManager) {}
 
     public function handle(GetSelectOptionsQuery $query): array
     {

@@ -7,9 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class RestoreDeletedSelectOptionCommandHandler
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(private readonly EntityManagerInterface $entityManager) {}
 
     public function __invoke(RestoreDeletedSelectOptionCommand $command): void
     {

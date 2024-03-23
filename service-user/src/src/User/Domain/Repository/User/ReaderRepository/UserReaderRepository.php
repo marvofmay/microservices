@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace App\User\Domain\Repository\User\ReaderRepository;
 
 use App\User\Domain\Entity\User;
-use App\User\Domain\Exception\NotFindByUUIDException;
 use App\User\Domain\Exception\NotExistsException;
-use App\User\Domain\Interface\UserReaderInterface;
+use App\User\Domain\Exception\NotFindByUUIDException;
+use App\User\Domain\Interface\User\UserReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

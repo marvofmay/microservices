@@ -10,9 +10,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class RestoreDeletedSelectOptionAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus, private SelectOption $selectOption)
-    {
-    }
+    public function __construct(private readonly MessageBusInterface $commandBus, private SelectOption $selectOption) {}
 
     public function setSelectOptionToRestore(SelectOption $selectOption): self
     {

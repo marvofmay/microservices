@@ -3,7 +3,7 @@
 namespace App\User\Domain\Service\User\ReaderService;
 
 use App\User\Domain\Entity\User;
-use App\User\Domain\Interface\UserReaderInterface;
+use App\User\Domain\Interface\User\UserReaderInterface;
 
 class UserReaderService
 {

@@ -5,10 +5,11 @@ declare(strict_types = 1);
 namespace App\User\Domain\Repository\SelectOption\WriterRepository;
 
 use App\User\Domain\Entity\SelectOption;
+use App\User\Domain\Interface\SelectOption\SelectOptionWriterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class SelectOptionWriterRepository extends ServiceEntityRepository
+class SelectOptionWriterRepository extends ServiceEntityRepository implements SelectOptionWriterInterface
 {
     public function __construct(private readonly ManagerRegistry $registry)
     {

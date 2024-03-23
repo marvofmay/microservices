@@ -6,7 +6,7 @@ namespace App\User\Presentation\API\SelectOption;
 
 use App\User\Domain\Action\SelectOption\UpdateSelectOptionAction;
 use App\User\Domain\DTO\SelectOption\UpdateDTO;
-use App\User\Domain\Service\SelectOption\ReaderService\SelectOptionReaderService;
+use App\User\Domain\Interface\SelectOption\SelectOptionReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,8 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/select-options', name: 'api.select-options.')]
 class UpdateSelectOptionController extends AbstractController
 {
-    public function __construct(private readonly SelectOptionReaderService $selectOptionReaderService, private readonly LoggerInterface $logger)
-    { }
+    public function __construct(private readonly SelectOptionReaderInterface $selectOptionReaderRepository, private readonly LoggerInterface $logger) {}
 
     #[Route('/{uuid}', name: 'update', methods: ['PUT'])]
     public function update(string $uuid, UpdateDTO $updateDTO, UpdateSelectOptionAction $updateSelectOptionAction): Response
@@ -26,14 +25,14 @@ class UpdateSelectOptionController extends AbstractController
                 return $this->json(['errors' => 'Different UUID in body raw and url'], Response::HTTP_BAD_REQUEST);
             }
 
-            $updateSelectOptionAction->setSelectOptionToUpdate($this->selectOptionReaderService->getSelectOptionByUUID($uuid))
+            $updateSelectOptionAction->setSelectOptionToUpdate($this->selectOptionReaderRepository->getSelectOptionByUUID($uuid))
                 ->execute($updateDTO);
 
             return $this->json(['message' => 'Select option has been updated.'], Response::HTTP_OK);
         } catch (\Exception $e) {
             $this->logger->error('trying select option updated: ' .  $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... Problem with update select option.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

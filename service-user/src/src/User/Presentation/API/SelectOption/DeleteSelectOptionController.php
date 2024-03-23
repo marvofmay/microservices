@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\User\Presentation\API\SelectOption;
 
 use App\User\Domain\Action\SelectOption\DeleteSelectOptionAction;
-use App\User\Domain\Service\SelectOption\ReaderService\SelectOptionReaderService;
+use App\User\Domain\Interface\SelectOption\SelectOptionReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,13 +14,13 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/select-options', name: 'api.select-options.')]
 class DeleteSelectOptionController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly SelectOptionReaderService $selectOptionReaderService) {}
+    public function __construct(private readonly LoggerInterface $logger, private readonly SelectOptionReaderInterface $selectOptionReaderRepository) {}
 
     #[Route('/{uuid}', name: 'destroy', methods: ['DELETE'])]
     public function destroy(string $uuid, DeleteSelectOptionAction $deleteSelectOptionAction): Response
     {
         try {
-            $deleteSelectOptionAction->setSelectOptionToDelete($this->selectOptionReaderService->getSelectOptionByUUID($uuid))
+            $deleteSelectOptionAction->setSelectOptionToDelete($this->selectOptionReaderRepository->getSelectOptionByUUID($uuid))
                 ->execute();
 
             return $this->json(['message' => 'Select option has been deleted.'], Response::HTTP_OK);

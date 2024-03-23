@@ -3,7 +3,7 @@
 namespace App\User\Domain\Service\User\WriterService;
 
 use App\User\Domain\Entity\User;
-use App\User\Domain\Interface\UserWriterInterface;
+use App\User\Domain\Interface\User\UserWriterInterface;
 
 class UserWriterService
 {

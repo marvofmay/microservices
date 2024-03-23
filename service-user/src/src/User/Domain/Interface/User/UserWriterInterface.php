@@ -1,6 +1,6 @@
 <?php
 
-namespace App\User\Domain\Interface;
+namespace App\User\Domain\Interface\User;
 
 use App\User\Domain\Entity\User;
 
