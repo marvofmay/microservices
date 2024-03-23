@@ -9,21 +9,21 @@ use App\User\Presentation\Request\User\ListingRequest;
 
 class GetUsersQuery
 {
-    private int $limit;
-    private int $page;
-    private int $offset;
-    private string $orderBy;
-    private string $orderDirection;
-    private array $filters;
-
-    public function __construct(ListingRequest $listingRequest)
-    {
-        $this->limit = $listingRequest->getLimit() ?? 10;
-        $this->page = $listingRequest->getPage() ?? 1;
+    public function __construct(
+        private readonly ListingRequest $listingRequest,
+        private int $limit = 10,
+        private int $page = 1,
+        private int $offset = 0,
+        private string $orderBy = User::COLUMN_CREATED_AT,
+        private string $orderDirection = 'DESC',
+        private array $filters = []
+    ) {
+        $this->limit = $listingRequest->getLimit() ?? $this->getLimit();
+        $this->page = $listingRequest->getPage() ?? $this->getPage();
         $this->orderBy = $listingRequest->getOrderBy() ?? User::COLUMN_CREATED_AT;
         $this->orderDirection = $listingRequest->getOrderDirection() ?? 'DESC';
         $this->filters = $listingRequest->getFilters();
-        $this->offset = ($this->page - 1) * $this->limit;
+        $this->offset = ($this->getPage() - 1) * $this->getLimit();
     }
 
     public function getLimit(): int
