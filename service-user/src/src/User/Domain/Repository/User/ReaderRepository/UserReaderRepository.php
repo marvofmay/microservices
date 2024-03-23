@@ -39,7 +39,7 @@ class UserReaderRepository extends ServiceEntityRepository implements UserReader
             ->getOneOrNullResult();
 
         if (!$user) {
-            throw new UserNotFindByUUIDException('User not found by uuid: ' . $uuid);
+            throw new NotFindByUUIDException('User not found by uuid: ' . $uuid);
         }
 
         return $user;

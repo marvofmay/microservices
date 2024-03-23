@@ -14,14 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/users', name: 'api.users.')]
 class DeleteUserController extends AbstractController
 {
-    public LoggerInterface $logger;
-    public UserReaderService $userReaderService;
-
-    public function __construct(LoggerInterface $logger, UserReaderService $userReaderService)
-    {
-        $this->userReaderService = $userReaderService;
-        $this->logger = $logger;
-    }
+    public function __construct(private readonly LoggerInterface $logger, private readonly UserReaderService $userReaderService) {}
 
     #[Route('/{uuid}', name: 'destroy', methods: ['DELETE'])]
     public function destroy(string $uuid, DeleteUserAction $deleteUserAction): Response
@@ -34,7 +27,7 @@ class DeleteUserController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('trying user delete: ' .  $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... problem with delete user'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
