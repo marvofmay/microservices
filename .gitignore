@@ -1,5 +1,5 @@
 # Ignoruj katalogi var i vendor w każdym projekcie
-*/src/var/
+*/src/var/cache
 */src/vendor/
 
 # Ignoruj katalogi .idea we wszystkich projektach

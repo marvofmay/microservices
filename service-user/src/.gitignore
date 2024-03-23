@@ -1,4 +1,4 @@
-*/src/var/
+*/src/var/cache
 */src/vendor/
 */.idea/
 /composer.lock
