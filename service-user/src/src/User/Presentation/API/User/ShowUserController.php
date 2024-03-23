@@ -24,16 +24,12 @@ class ShowUserController extends AbstractController
     public function show(string $uuid): Response
     {
         try {
-            return $this->json(
-                [
-                    'data' =>
-                        json_decode($this->serializer->serialize(
-                            $this->userReaderService->getUserByUUID($uuid),
-                            'json', ['groups' => ['user_info']],
-                        ))
-                ],
-                Response::HTTP_OK
-            );
+            return $this->json([
+                'data' => json_decode($this->serializer->serialize(
+                    $this->userReaderService->getUserByUUID($uuid),
+                    'json', ['groups' => ['user_info']],
+                ))
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             $this->logger->error('show user by uuid: ' . $e->getMessage());
 
