@@ -9,10 +9,7 @@ use App\Movie\Application\Command\ToggleActiveCommand;
 
 class ToggleActiveMovieCommandHandler
 {
-
-    public function __construct(private readonly MovieWriterService $movieWriterService)
-    {
-    }
+    public function __construct(private readonly MovieWriterService $movieWriterService) {}
 
     public function __invoke(ToggleActiveCommand $command): void
     {

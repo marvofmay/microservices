@@ -8,7 +8,5 @@ use App\Movie\Domain\Entity\Movie;
 
 class RestoreDeletedMovieCommand
 {
-    public function __construct(public Movie $movie)
-    {
-    }
+    public function __construct(public Movie $movie) {}
 }

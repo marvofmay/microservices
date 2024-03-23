@@ -8,9 +8,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class CreateMovieAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus)
-    {
-    }
+    public function __construct(private readonly MessageBusInterface $commandBus) {}
 
     public function execute(CreateMovieDTO $createMovieDTO): void
     {

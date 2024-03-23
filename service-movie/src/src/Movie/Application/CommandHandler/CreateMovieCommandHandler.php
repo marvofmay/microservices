@@ -9,9 +9,7 @@ use App\Movie\Domain\Service\WriterService\MovieWriterService;
 
 class CreateMovieCommandHandler
 {
-    public function __construct(private readonly MovieWriterService $movieWriterService)
-    {
-    }
+    public function __construct(private readonly MovieWriterService $movieWriterService) {}
 
     public function __invoke(CreateMovieCommand $command): void
     {
@@ -22,6 +20,7 @@ class CreateMovieCommandHandler
             $movieObject->setTitle($movie[Movie::COLUMN_TITLE]);
             $movieObject->setActive($movie[Movie::COLUMN_ACTIVE]);
             foreach ($movie[Movie::RELATION_CATEGORIES] as $categoryName) {
+                // tu sprawdzić czy istnieje już kategoria
                 $categoryObject = new Category();
                 $categoryObject->setName($categoryName);
                 $categoryObject->setMovie($movieObject);

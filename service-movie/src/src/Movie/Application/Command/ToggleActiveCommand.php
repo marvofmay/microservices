@@ -8,9 +8,7 @@ use App\Movie\Domain\Entity\Movie;
 
 class ToggleActiveCommand
 {
-    public function __construct(private readonly Movie $movie)
-    {
-    }
+    public function __construct(private readonly Movie $movie) {}
 
     public function getMovie(): Movie
     {

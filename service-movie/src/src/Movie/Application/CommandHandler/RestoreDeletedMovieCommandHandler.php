@@ -9,9 +9,7 @@ use App\Movie\Domain\Service\WriterService\MovieWriterService;
 
 class RestoreDeletedMovieCommandHandler
 {
-    public function __construct(private readonly MovieWriterService $movieWriterService)
-    {
-    }
+    public function __construct(private readonly MovieWriterService $movieWriterService) {}
 
     public function __invoke(RestoreDeletedMovieCommand $command): void
     {

@@ -7,9 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class DeleteMovieCommandHandler
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(private readonly EntityManagerInterface $entityManager) {}
 
     public function __invoke(DeleteMovieCommand $command): void
     {
