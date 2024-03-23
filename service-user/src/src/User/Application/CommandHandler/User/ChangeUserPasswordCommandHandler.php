@@ -10,14 +10,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ChangeUserPasswordCommandHandler
 {
-    private UserWriterService $userWriterService;
-    private UserPasswordHasherInterface $userPasswordInterface;
-
-    public function __construct(UserWriterService $userWriterService, UserPasswordHasherInterface $userPasswordInterface)
-    {
-        $this->userWriterService = $userWriterService;
-        $this->userPasswordInterface = $userPasswordInterface;
-    }
+    public function __construct(private readonly UserWriterService $userWriterService, private readonly UserPasswordHasherInterface $userPasswordInterface) {}
 
     public function __invoke(ChangeUserPasswordCommand $command): void
     {

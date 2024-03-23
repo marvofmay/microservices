@@ -8,7 +8,6 @@ use Prugala\RequestDto\Dto\RequestDtoInterface;
 use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 class ChangePasswordDTO implements RequestDtoInterface
 {
     #[Assert\NotBlank(
