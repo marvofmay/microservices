@@ -25,6 +25,7 @@ class UserWriterRepository extends ServiceEntityRepository implements UserWriter
     ): User
     {
         $entityManager = $this->getEntityManager();
+        $entityManager->getConnection()->setNestTransactionsWithSavepoints(true);
         $entityManager->beginTransaction();
         try {
             $entityManager->persist($user);
@@ -59,52 +60,62 @@ class UserWriterRepository extends ServiceEntityRepository implements UserWriter
         array $interests
     ): User
     {
-        $this->getEntityManager()->persist($user);
-        if (! empty($roles)) {
-            $currentRoles = $user->getRolesEntities();
-            foreach ($currentRoles as $currentRole) {
-                $this->getEntityManager()->remove($currentRole);
+        $entityManager = $this->getEntityManager();
+        $entityManager->getConnection()->setNestTransactionsWithSavepoints(true);
+        $entityManager->beginTransaction();
+
+        try {
+            $entityManager->persist($user);
+
+            if (!empty($roles)) {
+                $currentRoles = $user->getRolesEntities();
+                foreach ($currentRoles as $currentRole) {
+                    $entityManager->remove($currentRole);
+                }
+                foreach ($roles as $role) {
+                    $entityManager->persist($role);
+                }
             }
 
-            foreach ($roles as $role) {
-                $this->getEntityManager()->persist($role);
+            if (!empty($addresses)) {
+                $currentAddresses = $user->getAddressesEntities();
+                foreach ($currentAddresses as $currentAddress) {
+                    $entityManager->remove($currentAddress);
+                }
+                foreach ($addresses as $address) {
+                    $entityManager->persist($address);
+                }
             }
+
+            if (!empty($skills)) {
+                $currentSkills = $user->getSkillsEntities();
+                foreach ($currentSkills as $currentSkill) {
+                    $entityManager->remove($currentSkill);
+                }
+                foreach ($skills as $skill) {
+                    $entityManager->persist($skill);
+                }
+            }
+
+            if (!empty($interests)) {
+                $currentInterests = $user->getInterestsEntities();
+                foreach ($currentInterests as $currentInterest) {
+                    $entityManager->remove($currentInterest);
+                }
+                foreach ($interests as $interest) {
+                    $entityManager->persist($interest);
+                }
+            }
+
+            $entityManager->flush();
+            $entityManager->commit();
+        } catch (\Exception $e) {
+            $entityManager->rollback();
+
+            throw $e;
         }
-
-        if (! empty($addresses)) {
-            $currentAddresses = $user->getAddressesEntities();
-            foreach ($currentAddresses as $currentAddress) {
-                $this->getEntityManager()->remove($currentAddress);
-            }
-
-            foreach ($addresses as $address) {
-                $this->getEntityManager()->persist($address);
-            }
-        }
-
-        if (! empty($skills)) {
-            $currentSkills = $user->getSkillsEntities();
-            foreach ($currentSkills as $currentSkill) {
-                $this->getEntityManager()->remove($currentSkill);
-            }
-
-            foreach ($skills as $skill) {
-                $this->getEntityManager()->persist($skill);
-            }
-        }
-
-        if (! empty($interests)) {
-            $currentInterests = $user->getInterestsEntities();
-            foreach ($currentInterests as $currentInterest) {
-                $this->getEntityManager()->remove($currentInterest);
-            }
-            foreach ($interests as $interest) {
-                $this->getEntityManager()->persist($interest);
-            }
-        }
-
-        $this->getEntityManager()->flush();
 
         return $user;
     }
+
 }
