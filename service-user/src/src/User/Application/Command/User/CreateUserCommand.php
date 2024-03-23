@@ -17,5 +17,6 @@ class CreateUserCommand
         public array $roles,
         public array $skills,
         public array $interests,
-        public array $addresses) {}
+        public array $addresses
+    ) {}
 }

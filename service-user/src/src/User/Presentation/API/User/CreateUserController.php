@@ -6,7 +6,6 @@ namespace App\User\Presentation\API\User;
 
 use App\User\Domain\Action\User\CreateUserAction;
 use App\User\Domain\DTO\User\CreateDTO;
-use Container6GDOagi\getRedirectControllerService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
