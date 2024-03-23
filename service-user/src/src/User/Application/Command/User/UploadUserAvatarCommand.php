@@ -8,12 +8,5 @@ use App\User\Domain\Entity\User;
 
 class UploadUserAvatarCommand
 {
-    public string $avatar;
-    public User $user;
-
-    public function __construct(string $avatar, User $user)
-    {
-        $this->avatar = $avatar;
-        $this->user = $user;
-    }
+    public function __construct(public string $avatar, public User $user) {}
 }

@@ -8,10 +8,5 @@ use App\User\Domain\Entity\User;
 
 class ToggleActiveCommand
 {
-    public User $user;
-
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
+    public function __construct(public User $user) {}
 }

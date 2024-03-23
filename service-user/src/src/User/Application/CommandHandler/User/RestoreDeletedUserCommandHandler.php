@@ -9,12 +9,7 @@ use App\User\Domain\Service\User\WriterService\UserWriterService;
 
 class RestoreDeletedUserCommandHandler
 {
-    private UserWriterService $userWriterService;
-
-    public function __construct(UserWriterService $userWriterService)
-    {
-        $this->userWriterService = $userWriterService;
-    }
+    public function __construct(private readonly UserWriterService $userWriterService) {}
 
     public function __invoke(RestoreDeletedUserCommand $command): void
     {
