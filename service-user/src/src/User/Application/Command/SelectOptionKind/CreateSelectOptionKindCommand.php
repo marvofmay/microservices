@@ -6,5 +6,5 @@ namespace App\User\Application\Command\SelectOptionKind;
 
 class CreateSelectOptionKindCommand
 {
-    public function __construct(public string $name) { }
+    public function __construct(public string $name) {}
 }

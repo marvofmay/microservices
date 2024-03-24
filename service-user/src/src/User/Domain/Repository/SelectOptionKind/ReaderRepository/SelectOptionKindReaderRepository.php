@@ -5,12 +5,12 @@ declare(strict_types = 1);
 namespace App\User\Domain\Repository\SelectOptionKind\ReaderRepository;
 
 use App\User\Domain\Entity\SelectOptionKind;
-use App\User\Domain\Exception\NotExistsException;
 use App\User\Domain\Exception\NotFindByUUIDException;
+use App\User\Domain\Interface\SelectOptionKind\SelectOptionKindReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class SelectOptionKindReaderRepository extends ServiceEntityRepository
+class SelectOptionKindReaderRepository extends ServiceEntityRepository implements SelectOptionKindReaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -33,21 +33,5 @@ class SelectOptionKindReaderRepository extends ServiceEntityRepository
         }
 
         return $selectOptionKind;
-    }
-
-    public function getSelectOptionKinds()
-    {
-        $selectOptionKinds = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('sok')
-            ->from(SelectOptionKind::class, 'sok')
-            ->getQuery()
-            ->getResult();
-
-        if (! $selectOptionKinds) {
-            throw new NotExistsException('Select option kinds not exists.');
-        }
-
-        return $selectOptionKinds;
     }
 }

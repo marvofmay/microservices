@@ -14,9 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/select-option-kinds', name: 'api.select-option-kinds.')]
 class DeleteSelectOptionKindController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly SelectOptionKindReaderRepository $selectOptionKindReaderRepository)
-    {
-    }
+    public function __construct(private readonly LoggerInterface $logger, private readonly SelectOptionKindReaderRepository $selectOptionKindReaderRepository) {}
 
     #[Route('/{uuid}', name: 'destroy', methods: ['DELETE'])]
     public function destroy(string $uuid, DeleteSelectOptionKindAction $deleteSelectOptionKindAction): Response
@@ -30,7 +28,7 @@ class DeleteSelectOptionKindController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('trying user delete: ' .  $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... Problem with delete select option kind.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

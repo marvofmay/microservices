@@ -10,9 +10,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class DeleteSelectOptionKindAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus, private SelectOptionKind $selectOptionKind)
-    {
-    }
+    public function __construct(private readonly MessageBusInterface $commandBus, private SelectOptionKind $selectOptionKind) {}
 
     public function setSelectOptionKindToDelete(SelectOptionKind $selectOptionKind): self
     {

@@ -15,9 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class RestoreDeletedSelectOptionKindController extends AbstractController
 {
 
-    public function __construct(private readonly LoggerInterface $logger, private readonly SelectOptionKindReaderRepository $selectOptionKindReaderRepository)
-    {
-    }
+    public function __construct(private readonly LoggerInterface $logger, private readonly SelectOptionKindReaderRepository $selectOptionKindReaderRepository) {}
 
     #[Route('/{uuid}/restore-deleted', name: 'restore_deleted', methods: ['PATCH'])]
     public function restoreDeleted(string $uuid, RestoreDeletedSelectOptionKindAction $restoreDeletedSelectOptionKindAction): Response
@@ -31,7 +29,7 @@ class RestoreDeletedSelectOptionKindController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('trying restore deleted select option kind: ' .  $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... problem with restore deleted select option kind.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

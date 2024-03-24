@@ -6,9 +6,7 @@ use App\User\Domain\Entity\SelectOptionKind;
 
 class RestoreDeletedSelectOptionKindCommand
 {
-    public function __construct(private readonly SelectOptionKind $selectOptionKind)
-    {
-    }
+    public function __construct(private readonly SelectOptionKind $selectOptionKind) {}
 
     public function getSelectOptionKind(): SelectOptionKind
     {

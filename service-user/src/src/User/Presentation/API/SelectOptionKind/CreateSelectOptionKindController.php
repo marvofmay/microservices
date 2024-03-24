@@ -26,7 +26,7 @@ class CreateSelectOptionKindController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('trying add new select option kind: ' .  $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... problem with add select option kind.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

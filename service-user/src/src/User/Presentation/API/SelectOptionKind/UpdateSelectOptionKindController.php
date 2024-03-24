@@ -6,7 +6,7 @@ namespace App\User\Presentation\API\SelectOptionKind;
 
 use App\User\Domain\Action\SelectOptionKind\UpdateSelectOptionKindAction;
 use App\User\Domain\DTO\SelectOptionKind\UpdateDTO;
-use App\User\Domain\Repository\SelectOptionKind\ReaderRepository\SelectOptionKindReaderRepository;
+use App\User\Domain\Interface\SelectOptionKind\SelectOptionKindReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,9 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class UpdateSelectOptionKindController extends AbstractController
 {
     public function __construct(
-        private readonly SelectOptionKindReaderRepository $selectOptionKindReaderRepository,
+        private readonly SelectOptionKindReaderInterface $selectOptionKindReaderRepository,
         private readonly LoggerInterface $logger
-    ) { }
+    ) {}
 
     #[Route('/{uuid}', name: 'update', methods: ['PUT'])]
     public function update(string $uuid, UpdateDTO $updateDTO, UpdateSelectOptionKindAction $updateSelectOptionAction): Response
@@ -36,7 +36,7 @@ class UpdateSelectOptionKindController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('trying select option kind updated: ' .  $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... Problem with update select option kind.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -20,9 +20,7 @@ class ListSelectOptionKindController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly SerializerInterface $serializer
-    )
-    {
-    }
+    ) {}
 
     #[Route('', name: 'list', methods: ['GET'])]
     public function index(Request $request, GetSelectOptionKindsQueryHandler $selectOptionKindsQueryHandler): Response
@@ -41,7 +39,7 @@ class ListSelectOptionKindController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('trying show select option kinds: ' . $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... Problem with listing select option kind.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

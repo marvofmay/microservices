@@ -3,11 +3,11 @@
 namespace App\User\Domain\Service\SelectOptionKind\WriterService;
 
 use App\User\Domain\Entity\SelectOptionKind;
-use App\User\Domain\Repository\SelectOptionKind\WriterRepository\SelectOptionKindWriterRepository;
+use App\User\Domain\Interface\SelectOptionKind\SelectOptionKindWriterInterface;
 
 class SelectOptionKindWriterService
 {
-    public function __construct(private readonly SelectOptionKindWriterRepository $selectOptionKindWriterRepository) { }
+    public function __construct(private readonly SelectOptionKindWriterInterface $selectOptionKindWriterRepository) {}
 
     public function __toString()
     {

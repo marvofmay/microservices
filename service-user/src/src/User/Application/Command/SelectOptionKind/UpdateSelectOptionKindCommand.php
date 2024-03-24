@@ -12,7 +12,7 @@ class UpdateSelectOptionKindCommand
         private readonly string $uuid,
         private readonly string $name,
         private readonly SelectOptionKind $selectOptionKind
-    ) { }
+    ) {}
 
     public function getUuid(): string
     {

@@ -11,9 +11,7 @@ use App\User\Domain\DTO\SelectOptionKind\UpdateDTO;
 
 class UpdateSelectOptionKindAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus, private SelectOptionKind $selectOptionKind)
-    {
-    }
+    public function __construct(private readonly MessageBusInterface $commandBus, private SelectOptionKind $selectOptionKind) {}
 
     public function setSelectOptionKindToUpdate(SelectOptionKind $selectOptionKind): self
     {
