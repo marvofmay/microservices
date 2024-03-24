@@ -9,9 +9,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class UpdateMovieAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus, private Movie $movie)
-    {
-    }
+    public function __construct(private readonly MessageBusInterface $commandBus, private Movie $movie) {}
 
     public function setMovieToUpdate(Movie $movie): self
     {

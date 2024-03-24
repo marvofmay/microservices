@@ -17,7 +17,7 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[ORM\Entity]
 #[ORM\Table(
-    name: "movies",
+    name: "movie",
     uniqueConstraints: [
         new UniqueConstraint(name: "unique_title", columns: ["title"])
     ]
@@ -26,7 +26,7 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 #[Gedmo\SoftDeleteable(fieldName: "deletedAt", timeAware: false, hardDelete: true)]
 class Movie
 {
-    public const TABLE_NAME = 'movies';
+    public const TABLE_NAME = 'movie';
     public const COLUMN_UUID = 'uuid';
     public const COLUMN_TITLE = 'title';
     public const COLUMN_ACTIVE = 'active';
@@ -65,7 +65,7 @@ class Movie
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: Category::RELATION_MOVIES)]
     #[ORM\JoinTable(
-        name: MovieCategory::MOVIES_CATEGORIES_TABLE_NAME,
+        name: MovieCategory::MOVIE_CATEGORY_TABLE_NAME,
         joinColumns: [new ORM\JoinColumn(name: MovieCategory::COLUMN_MOVIE_UUID, referencedColumnName: "uuid")],
         inverseJoinColumns: [new ORM\JoinColumn(name: MovieCategory::COLUMN_CATEGORY_UUID, referencedColumnName: "uuid")]
     )]

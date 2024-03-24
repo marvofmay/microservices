@@ -46,7 +46,6 @@ class Category
     private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: Movie::RELATION_CATEGORIES)]
-    #[ORM\JoinTable(name: MovieCategory::MOVIES_CATEGORIES_TABLE_NAME)]
     public Collection $movies;
 
     public function __construct()

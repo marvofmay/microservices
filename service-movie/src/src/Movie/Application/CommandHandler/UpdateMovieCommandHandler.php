@@ -11,16 +11,15 @@ class UpdateMovieCommandHandler
 {
     public function __construct(
         private readonly MovieWriterService $movieWriterService,
-        private Movie $movie,
-        private array $categories = []
+        private Movie $movie
     ) {}
 
     public function __invoke(UpdateMovieCommand $command): void
     {
         $this->setMovie($command);
-        $this->setCategories($this->movie, $command);
         $this->movieWriterService->deleteMovieCategories($this->movie);
-        $this->movieWriterService->updateMovieInDB($this->movie, $this->categories);
+        $this->setCategories($this->movie, $command);
+        $this->movieWriterService->updateMovieInDB($this->movie);
     }
 
     private function setMovie(UpdateMovieCommand $command): void
@@ -36,7 +35,7 @@ class UpdateMovieCommandHandler
             $category = new Category();
             $category->setName($categoryName);
             $category->setMovie($movie);
-            $this->categories[] = $category;
+            $this->movie->addCategory($category);
         }
     }
 }

@@ -63,30 +63,31 @@ class MovieWriterRepository extends ServiceEntityRepository
         }
     }
 
-    public function updateMovieInDB(Movie $movie, array $categories): void
+    public function updateMovieInDB(Movie $movie): void
     {
-        $this->setMovieCategories($movie, $categories);
-
         if ($this->movieReaderRepository->getMovieByTitleAndDifferentUUID($movie->getTitle(), $movie->getUuid()->toString())) {
             throw new MovieExistsInDBException(sprintf('Movie "%s" exists in DB', $movie->getTitle()));
         }
+
+        foreach ($movie->getCategoriesEntities() as $categoryEntity) {
+            $categoryObject = $this->categoryReaderRepository->getCategoryByNme($categoryEntity->getName());
+            if (empty($categoryObject)) {
+                $this->getEntityManager()->persist($categoryEntity);
+                $this->getEntityManager()->flush();
+            } else {
+                $movie->removeCategory($categoryEntity);
+                $movie->addCategory($categoryObject);
+            }
+        }
+
         $this->getEntityManager()->persist($movie);
         $this->getEntityManager()->flush();
     }
 
-    public function setMovieCategories(Movie $movie, array $categories): void
-    {
-        foreach ($categories as $categoryObject) {
-            $categoryObject->setMovie($movie);
-            $this->getEntityManager()->persist($categoryObject);
-        }
-    }
-
     public function deleteMovieCategories(Movie $movie): void
     {
-        $categoriesToRemove = $movie->getCategoriesEntities();
-        foreach ($categoriesToRemove as $categoryToRemove) {
-            $this->getEntityManager()->remove($categoryToRemove);
-        }
+        $query = $this->getEntityManager()->createQuery('DELETE FROM App\Movie\Domain\Entity\MovieCategory mc WHERE mc.movie_uuid = :movieUUID');
+        $query->setParameter('movieUUID', $movie->getUuid());
+        $query->execute();
     }
 }

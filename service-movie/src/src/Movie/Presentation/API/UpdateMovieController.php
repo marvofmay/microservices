@@ -39,7 +39,7 @@ class UpdateMovieController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('trying update movie: ' .  $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... Problem with update movie'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

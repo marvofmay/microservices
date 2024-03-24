@@ -60,7 +60,7 @@ class MovieReaderRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 
-        if (!$movie) {
+        if (! $movie) {
             throw new MovieNotFindByUUIDException('Movie not found by uuid: ' . $uuid);
         }
 

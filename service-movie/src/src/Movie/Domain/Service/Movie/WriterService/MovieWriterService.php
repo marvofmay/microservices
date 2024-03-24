@@ -28,9 +28,9 @@ class MovieWriterService
         $this->movieWriterRepository->saveMoviesAndCategoriesInDB($movies);
     }
 
-    public function updateMovieInDB (Movie $movie, array $categories): void
+    public function updateMovieInDB (Movie $movie): void
     {
-        $this->movieWriterRepository->updateMovieInDB($movie, $categories);
+        $this->movieWriterRepository->updateMovieInDB($movie);
     }
 
     public function deleteMovieCategories(Movie $movie): void
