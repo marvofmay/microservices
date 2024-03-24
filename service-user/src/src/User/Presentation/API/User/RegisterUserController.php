@@ -14,9 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/users', name: 'api.users.')]
 class RegisterUserController extends AbstractController
 {
-    public function __construct(
-        private readonly LoggerInterface $logger,
-    ) {}
+    public function __construct(private readonly LoggerInterface $logger) {}
     #[Route('/register', name: 'register', methods: ['POST'])]
     public function register(RegisterDTO $registerDTO, RegisterUserAction $registerUserAction): Response
     {

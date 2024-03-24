@@ -6,7 +6,7 @@ namespace App\User\Presentation\API\User;
 
 use App\User\Domain\Action\User\UploadUserAvatarAction;
 use App\User\Domain\DTO\User\UploadUserAvatarDTO;
-use App\User\Domain\Service\User\ReaderService\UserReaderService;
+use App\User\Domain\Interface\User\UserReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/users', name: 'api.users.')]
 class UploadUserAvatarController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly UserReaderService $userReaderService) {}
+    public function __construct(
+        private readonly LoggerInterface $logger,
+        private readonly UserReaderInterface $userReaderRepository
+    ) {}
 
     #[Route('/{uuid}/avatar/upload', name: 'avatar_upload', methods: ['PATCH'])]
     public function store(string $uuid, UploadUserAvatarDTO $uploadUserAvatarDTO, UploadUserAvatarAction $uploadUserAvatarAction): Response {
@@ -24,7 +27,7 @@ class UploadUserAvatarController extends AbstractController
                 return $this->json(['errors' => 'Different UUID in body raw and url'], Response::HTTP_BAD_REQUEST);
             }
 
-            $uploadUserAvatarAction->setUser($this->userReaderService->getNotDeletedUserByUUID($uuid))
+            $uploadUserAvatarAction->setUser($this->userReaderRepository->getNotDeletedUserByUUID($uuid))
                 ->execute($uploadUserAvatarDTO);
 
             return $this->json(['data' => 'User\'s avatar has been saved.'], Response::HTTP_OK);

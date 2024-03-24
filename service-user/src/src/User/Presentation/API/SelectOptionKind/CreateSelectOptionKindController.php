@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/select-option-kinds', name: 'api.select-option-kinds.')]
 class CreateSelectOptionKindController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger) { }
+    public function __construct(private readonly LoggerInterface $logger) {}
 
     #[Route('', name: 'store', methods: ['POST'])]
     public function store(CreateDTO $createDTO, CreateSelectOptionKindAction $createSelectOptionKindAction): Response

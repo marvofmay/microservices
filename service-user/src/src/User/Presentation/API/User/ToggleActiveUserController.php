@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\User\Presentation\API\User;
 
 use App\User\Domain\Action\User\ToggleActiveAction;
-use App\User\Domain\Service\User\ReaderService\UserReaderService;
+use App\User\Domain\Interface\User\UserReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,14 +15,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class ToggleActiveUserController extends AbstractController
 {
     public function __construct(
-        private readonly UserReaderService $userReaderService,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly UserReaderInterface $userReaderRepository
     ) {}
     #[Route('/{uuid}/toggle-active', name: 'toggle_active', methods: ['PATCH'])]
     public function toggleActive(string $uuid, ToggleActiveAction $toggleActiveAction): Response
     {
         try {
-            $user = $this->userReaderService->getUserByUUID($uuid);
+            $user = $this->userReaderRepository->getUserByUUID($uuid);
             $toggleActiveAction->setUserToggleActive($user)->execute();
 
             return $this->json([

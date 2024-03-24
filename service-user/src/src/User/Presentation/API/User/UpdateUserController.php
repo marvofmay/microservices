@@ -6,7 +6,7 @@ namespace App\User\Presentation\API\User;
 
 use App\User\Domain\Action\User\UpdateUserAction;
 use App\User\Domain\DTO\User\UpdateDTO;
-use App\User\Domain\Service\User\ReaderService\UserReaderService;
+use App\User\Domain\Interface\User\UserReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,8 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class UpdateUserController extends AbstractController
 {
     public function __construct(
-        private readonly UserReaderService $userReaderService,
         private readonly LoggerInterface $logger,
+        private readonly UserReaderInterface $userReaderRepository
     ) {}
 
     #[Route('/{uuid}', name: 'update', methods: ['PUT'])]
@@ -27,7 +27,7 @@ class UpdateUserController extends AbstractController
             if ($uuid !== $updateDTO->getUUID()) {
                 return $this->json(['errors' => 'Different UUID in body raw and url'], Response::HTTP_BAD_REQUEST);
             }
-            $updateUserAction->setUserToUpdate($this->userReaderService->getUserByUUID($uuid))
+            $updateUserAction->setUserToUpdate($this->userReaderRepository->getUserByUUID($uuid))
                 ->execute($updateDTO);
 
             return $this->json(['message' => 'User has been updated.'], Response::HTTP_OK);

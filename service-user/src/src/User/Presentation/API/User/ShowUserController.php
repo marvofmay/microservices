@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\User\Presentation\API\User;
 
-use App\User\Domain\Service\User\ReaderService\UserReaderService;
+use App\User\Domain\Interface\User\UserReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,8 +15,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 class ShowUserController extends AbstractController
 {
     public function __construct(
-        private readonly UserReaderService $userReaderService,
         private readonly LoggerInterface $logger,
+        private readonly UserReaderInterface $userReaderRepository,
         private readonly SerializerInterface $serializer
     ) {}
 
@@ -26,7 +26,7 @@ class ShowUserController extends AbstractController
         try {
             return $this->json([
                 'data' => json_decode($this->serializer->serialize(
-                    $this->userReaderService->getUserByUUID($uuid),
+                    $this->userReaderRepository->getUserByUUID($uuid),
                     'json', ['groups' => ['user_info']],
                 ))
             ], Response::HTTP_OK);
