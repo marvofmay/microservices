@@ -6,18 +6,19 @@ namespace App\Movie\Domain\Repository\Movie\WriterRepository;
 
 use App\Movie\Domain\Entity\Movie;
 use App\Movie\Domain\Exception\MovieExistsInDBException;
-use App\Movie\Domain\Repository\Category\ReaderRepository\CategoryReaderRepository;
+use App\Movie\Domain\Interfce\Category\CategoryReaderInterface;
+use App\Movie\Domain\Interfce\Movie\MovieWriterInterface;
 use App\Movie\Domain\Repository\Movie\ReaderRepository\MovieReaderRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class MovieWriterRepository extends ServiceEntityRepository
+class MovieWriterRepository extends ServiceEntityRepository implements MovieWriterInterface
 {
 
     public function __construct(
         private readonly ManagerRegistry $registry,
         private readonly MovieReaderRepository $movieReaderRepository,
-        private readonly CategoryReaderRepository $categoryReaderRepository
+        private readonly CategoryReaderInterface $categoryReaderRepository
     ) {
         parent::__construct($registry, Movie::class);
     }

@@ -5,12 +5,13 @@ declare(strict_types = 1);
 namespace App\Movie\Domain\Repository\Category\ReaderRepository;
 
 use App\Movie\Domain\Entity\Category;
-use App\Movie\Domain\Exception\MovieNotFindByUUIDException;
+
+use App\Movie\Domain\Interfce\Category\CategoryReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
-class CategoryReaderRepository extends ServiceEntityRepository
+class CategoryReaderRepository extends ServiceEntityRepository implements CategoryReaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {

@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace App\Movie\Presentation\API;
 
 use App\Movie\Domain\Action\ToggleActiveAction;
+use App\Movie\Domain\Interfce\Movie\MovieReaderInterface;
 use App\Movie\Domain\Service\Movie\ReaderService\CheckTokenService;
-use App\Movie\Domain\Service\Movie\ReaderService\MovieReaderService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +18,7 @@ class ToggleActiveMovieController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly CheckTokenService $checkTokenService,
-        private readonly MovieReaderService $movieReaderService
+        private readonly MovieReaderInterface $movieReaderRepository
     ) {}
 
     #[Route('/{uuid}/toggle-active', name: 'toggle_active', methods: ['PATCH'])]
@@ -26,7 +26,7 @@ class ToggleActiveMovieController extends AbstractController
     {
         try {
             $this->checkTokenService->verifyToken();
-            $movie = $this->movieReaderService->getMovieByUUID($uuid, true);
+            $movie = $this->movieReaderRepository->getMovieByUUID($uuid, true);
             $toggleActiveAction->setMovieToggleActive($movie)->execute();
 
             return $this->json(
@@ -38,7 +38,7 @@ class ToggleActiveMovieController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('trying movie\'s active toggle: ' .  $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... Problem with toggle active movie.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

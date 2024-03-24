@@ -6,8 +6,8 @@ namespace App\Movie\Presentation\API;
 
 use App\Movie\Domain\Action\UpdateMovieAction;
 use App\Movie\Domain\DTO\UpdateMovieDTO;
+use App\Movie\Domain\Interfce\Movie\MovieReaderInterface;
 use App\Movie\Domain\Service\Movie\ReaderService\CheckTokenService;
-use App\Movie\Domain\Service\Movie\ReaderService\MovieReaderService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +18,7 @@ class UpdateMovieController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly MovieReaderService $movieReaderService,
+        private readonly MovieReaderInterface $movieReaderRepository,
         private readonly CheckTokenService $checkTokenService
     ) {}
 
@@ -32,7 +32,7 @@ class UpdateMovieController extends AbstractController
                 return $this->json(['errors' => 'different movie UUID in body raw and url'], Response::HTTP_BAD_REQUEST);
             }
 
-            $updateMovieAction->setMovieToUpdate($this->movieReaderService->getMovieByUUID($uuid))
+            $updateMovieAction->setMovieToUpdate($this->movieReaderRepository->getMovieByUUID($uuid))
                 ->execute($updateMovieDTO);
 
             return $this->json(['data' => 'movie has been updated'], Response::HTTP_OK);

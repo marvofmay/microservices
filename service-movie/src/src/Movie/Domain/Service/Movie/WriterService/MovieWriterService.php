@@ -5,13 +5,11 @@ declare(strict_types = 1);
 namespace App\Movie\Domain\Service\Movie\WriterService;
 
 use App\Movie\Domain\Entity\Movie;
-use App\Movie\Domain\Repository\Movie\WriterRepository\MovieWriterRepository;
+use App\Movie\Domain\Interfce\Movie\MovieWriterInterface;
 
 class MovieWriterService
 {
-    public function __construct(private readonly MovieWriterRepository $movieWriterRepository)
-    {
-    }
+    public function __construct(private readonly MovieWriterInterface $movieWriterRepository) {}
 
     public function __toString()
     {

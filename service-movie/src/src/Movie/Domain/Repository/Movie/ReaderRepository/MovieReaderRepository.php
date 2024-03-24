@@ -6,11 +6,12 @@ namespace App\Movie\Domain\Repository\Movie\ReaderRepository;
 
 use App\Movie\Domain\Entity\Movie;
 use App\Movie\Domain\Exception\MovieNotFindByUUIDException;
+use App\Movie\Domain\Interfce\Movie\MovieReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
-class MovieReaderRepository extends ServiceEntityRepository
+class MovieReaderRepository extends ServiceEntityRepository implements MovieReaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {

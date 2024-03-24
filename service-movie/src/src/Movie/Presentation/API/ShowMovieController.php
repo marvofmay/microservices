@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Movie\Presentation\API;
 
+use App\Movie\Domain\Interfce\Movie\MovieReaderInterface;
 use App\Movie\Domain\Service\Movie\ReaderService\CheckTokenService;
-use App\Movie\Domain\Service\Movie\ReaderService\MovieReaderService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ class ShowMovieController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly MovieReaderService $movieReaderService,
+        private readonly MovieReaderInterface $movieReaderRepository,
         private readonly CheckTokenService $checkTokenService,
         private readonly SerializerInterface $serializer
     ) {}
@@ -31,7 +31,7 @@ class ShowMovieController extends AbstractController
             return $this->json([
                 'data' =>
                     json_decode($this->serializer->serialize(
-                        $this->movieReaderService->getMovieByUUID($uuid, true),
+                        $this->movieReaderRepository->getMovieByUUID($uuid, true),
                         'json',
                         ['groups' => ['movie_info']],
                     ))
@@ -40,7 +40,7 @@ class ShowMovieController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('trying show movie by uuid: ' .  $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... Problem with show movie.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

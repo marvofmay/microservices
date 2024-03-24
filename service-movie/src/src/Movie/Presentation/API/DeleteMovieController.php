@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace App\Movie\Presentation\API;
 
 use App\Movie\Domain\Action\DeleteMovieAction;
+use App\Movie\Domain\Interfce\Movie\MovieReaderInterface;
 use App\Movie\Domain\Service\Movie\ReaderService\CheckTokenService;
-use App\Movie\Domain\Service\Movie\ReaderService\MovieReaderService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ class DeleteMovieController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly MovieReaderService $movieReaderService,
+        private readonly MovieReaderInterface $movieReaderRepository,
         private readonly CheckTokenService $checkTokenService
     ) {}
 
@@ -26,14 +26,14 @@ class DeleteMovieController extends AbstractController
     {
         try {
             $this->checkTokenService->verifyToken();
-            $deleteMovieAction->setMovieToDelete($this->movieReaderService->getMovieByUUID($uuid))
+            $deleteMovieAction->setMovieToDelete($this->movieReaderRepository->getMovieByUUID($uuid))
                 ->execute();
 
             return $this->json(['message' => 'movie has been deleted'], Response::HTTP_OK);
         } catch (\Exception $e) {
             $this->logger->error('trying delete movie: ' .  $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... Problem with delete movie.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
