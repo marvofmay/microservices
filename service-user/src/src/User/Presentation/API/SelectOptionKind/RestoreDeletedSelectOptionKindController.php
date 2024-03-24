@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\User\Presentation\API\SelectOptionKind;
 
 use App\User\Domain\Action\SelectOptionKind\RestoreDeletedSelectOptionKindAction;
-use App\User\Domain\Repository\SelectOptionKind\ReaderRepository\SelectOptionKindReaderRepository;
+use App\User\Domain\Interface\SelectOptionKind\SelectOptionKindReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class RestoreDeletedSelectOptionKindController extends AbstractController
 {
 
-    public function __construct(private readonly LoggerInterface $logger, private readonly SelectOptionKindReaderRepository $selectOptionKindReaderRepository) {}
+    public function __construct(
+        private readonly LoggerInterface $logger,
+        private readonly SelectOptionKindReaderInterface $selectOptionKindReaderRepository
+    ) {}
 
     #[Route('/{uuid}/restore-deleted', name: 'restore_deleted', methods: ['PATCH'])]
     public function restoreDeleted(string $uuid, RestoreDeletedSelectOptionKindAction $restoreDeletedSelectOptionKindAction): Response
