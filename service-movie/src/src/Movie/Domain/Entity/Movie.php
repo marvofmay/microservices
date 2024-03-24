@@ -63,13 +63,33 @@ class Movie
     #[Groups("movie_info")]
     private ?\DateTimeInterface $deletedAt = null;
 
-    #[ORM\OneToMany(mappedBy: Category::RELATION_MOVIE, targetEntity: Category::class)]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: Category::RELATION_MOVIES)]
+    #[ORM\JoinTable(
+        name: MovieCategory::MOVIES_CATEGORIES_TABLE_NAME,
+        joinColumns: [new ORM\JoinColumn(name: MovieCategory::COLUMN_MOVIE_UUID, referencedColumnName: "uuid")],
+        inverseJoinColumns: [new ORM\JoinColumn(name: MovieCategory::COLUMN_CATEGORY_UUID, referencedColumnName: "uuid")]
+    )]
     #[Groups("movie_info")]
     public Collection $categories;
 
     public function __construct()
     {
         $this->{self::RELATION_CATEGORIES} = new ArrayCollection();
+    }
+
+    public function getCategoriesEntities(): Collection
+    {
+        return $this->{self::RELATION_CATEGORIES};
+    }
+
+    public function getCategories(): array
+    {
+        $arrayOfCategoriesNames = [];
+        foreach ($this->getCategoriesEntities()->toArray() as $skill) {
+            $arrayOfCategoriesNames[] = $skill->getName();
+        }
+
+        return $arrayOfCategoriesNames;
     }
 
     public function getUuid(): UuidInterface
@@ -142,21 +162,6 @@ class Movie
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTime();
-    }
-
-    public function getCategories(): array
-    {
-        $arrayOfCategoriesNames = [];
-        foreach ($this->getCategoriesEntities()->toArray() as $skill) {
-            $arrayOfCategoriesNames[] = $skill->getName();
-        }
-
-        return $arrayOfCategoriesNames;
-    }
-
-    public function getCategoriesEntities(): Collection
-    {
-        return $this->{self::RELATION_CATEGORIES};
     }
 
     public static function getAttributes(): array
