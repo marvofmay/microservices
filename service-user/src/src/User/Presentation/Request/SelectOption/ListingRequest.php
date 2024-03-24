@@ -7,15 +7,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ListingRequest
 {
-    private array $data;
-    public ?int $limit;
-    public ?int $page;
-    public ?string $orderBy;
-    public ?string $orderDirection;
-    public array $filters = [];
-
-    public function __construct(Request $request)
-    {
+    public function __construct(
+        private readonly Request $request,
+        private array $data = [],
+        public ?int $limit = null,
+        public ?int $page = null,
+        public ?string $orderBy = null,
+        public ?string $orderDirection = null,
+        public array $filters = []
+    ) {
         $this->data = ! empty($request->query->all()) ? $request->query->all() : [];
         $this->limit = $this->data['limit'] ?? null;
         $this->page = $this->data['page'] ?? null;
