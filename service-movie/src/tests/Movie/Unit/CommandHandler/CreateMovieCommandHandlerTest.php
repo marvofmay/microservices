@@ -2,10 +2,10 @@
 
 namespace App\Tests\Movie\Unit\CommandHandler;
 
-use App\Movie\Application\CommandHandler\CreateMovieCommandHandler;
 use App\Movie\Application\Command\CreateMovieCommand;
-use App\Movie\Domain\Service\WriterService\MovieWriterService;
+use App\Movie\Application\CommandHandler\CreateMovieCommandHandler;
 use App\Movie\Domain\Entity\Movie;
+use App\Movie\Domain\Service\Movie\WriterService\MovieWriterService;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CreateMovieCommandHandlerTest extends WebTestCase

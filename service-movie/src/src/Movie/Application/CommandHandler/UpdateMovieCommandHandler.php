@@ -5,7 +5,7 @@ namespace App\Movie\Application\CommandHandler;
 use App\Movie\Application\Command\UpdateMovieCommand;
 use App\Movie\Domain\Entity\Category;
 use App\Movie\Domain\Entity\Movie;
-use App\Movie\Domain\Service\WriterService\MovieWriterService;
+use App\Movie\Domain\Service\Movie\WriterService\MovieWriterService;
 
 class UpdateMovieCommandHandler
 {

@@ -77,6 +77,20 @@ class Movie
         $this->{self::RELATION_CATEGORIES} = new ArrayCollection();
     }
 
+    public function addCategory(Category $category): self
+    {
+        $this->{self::RELATION_CATEGORIES}[] = $category;
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        $this->{self::RELATION_CATEGORIES}->removeElement($category);
+
+        return $this;
+    }
+
     public function getCategoriesEntities(): Collection
     {
         return $this->{self::RELATION_CATEGORIES};
@@ -85,8 +99,8 @@ class Movie
     public function getCategories(): array
     {
         $arrayOfCategoriesNames = [];
-        foreach ($this->getCategoriesEntities()->toArray() as $skill) {
-            $arrayOfCategoriesNames[] = $skill->getName();
+        foreach ($this->getCategoriesEntities()->toArray() as $category) {
+            $arrayOfCategoriesNames[] = $category->getName();
         }
 
         return $arrayOfCategoriesNames;

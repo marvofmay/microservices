@@ -2,11 +2,11 @@
 
 namespace App\Tests\Movie\Unit\CommandHandler;
 
-use PHPUnit\Framework\TestCase;
-use App\Movie\Application\CommandHandler\UpdateMovieCommandHandler;
 use App\Movie\Application\Command\UpdateMovieCommand;
-use App\Movie\Domain\Service\WriterService\MovieWriterService;
+use App\Movie\Application\CommandHandler\UpdateMovieCommandHandler;
 use App\Movie\Domain\Entity\Movie;
+use App\Movie\Domain\Service\Movie\WriterService\MovieWriterService;
+use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 class UpdateMovieCommandHandlerTest extends TestCase

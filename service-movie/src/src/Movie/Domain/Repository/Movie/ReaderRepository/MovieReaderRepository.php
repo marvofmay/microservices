@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\Movie\Domain\Repository\ReaderRepository;
+namespace App\Movie\Domain\Repository\Movie\ReaderRepository;
 
 use App\Movie\Domain\Entity\Movie;
 use App\Movie\Domain\Exception\MovieNotFindByUUIDException;

@@ -7,7 +7,7 @@ namespace App\Movie\Presentation\API;
 use App\Movie\Application\Query\GetMoviesQuery;
 use App\Movie\Application\QueryHandler\GetMoviesQueryHandlerFactory;
 use App\Movie\Domain\DTO\ListingMovieDTO;
-use App\Movie\Domain\Service\ReaderService\CheckTokenService;
+use App\Movie\Domain\Service\Movie\ReaderService\CheckTokenService;
 use App\Movie\Presentation\Request\ListingMovieRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;

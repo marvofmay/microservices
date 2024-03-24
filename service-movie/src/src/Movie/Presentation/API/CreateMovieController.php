@@ -6,7 +6,7 @@ namespace App\Movie\Presentation\API;
 
 use App\Movie\Domain\Action\CreateMovieAction;
 use App\Movie\Domain\DTO\CreateMovieDTO;
-use App\Movie\Domain\Service\ReaderService\CheckTokenService;
+use App\Movie\Domain\Service\Movie\ReaderService\CheckTokenService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +31,7 @@ class CreateMovieController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('trying create movie: ' .  $e->getMessage());
 
-            return $this->json(['errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['errors' => 'Upss... Problem with create movie.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace App\Movie\Domain\Service\WriterService;
+namespace App\Movie\Domain\Service\Movie\WriterService;
 
 use App\Movie\Domain\Entity\Movie;
-use App\Movie\Domain\Repository\WriterRepository\MovieWriterRepository;
+use App\Movie\Domain\Repository\Movie\WriterRepository\MovieWriterRepository;
 
 class MovieWriterService
 {
@@ -23,9 +23,9 @@ class MovieWriterService
         $this->movieWriterRepository->saveMovieInDB($movie);
     }
 
-    public function saveMoviesInDB (array $movies, array $categories): void
+    public function saveMoviesAndCategoriesInDB (array $movies): void
     {
-        $this->movieWriterRepository->saveMoviesInDB($movies, $categories);
+        $this->movieWriterRepository->saveMoviesAndCategoriesInDB($movies);
     }
 
     public function updateMovieInDB (Movie $movie, array $categories): void

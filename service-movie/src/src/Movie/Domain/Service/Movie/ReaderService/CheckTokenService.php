@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\Movie\Domain\Service\ReaderService;
+namespace App\Movie\Domain\Service\Movie\ReaderService;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Request;

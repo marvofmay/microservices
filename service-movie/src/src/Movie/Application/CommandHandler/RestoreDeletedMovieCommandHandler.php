@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Movie\Application\CommandHandler;
 
 use App\Movie\Application\Command\RestoreDeletedMovieCommand;
-use App\Movie\Domain\Service\WriterService\MovieWriterService;
+use App\Movie\Domain\Service\Movie\WriterService\MovieWriterService;
 
 class RestoreDeletedMovieCommandHandler
 {

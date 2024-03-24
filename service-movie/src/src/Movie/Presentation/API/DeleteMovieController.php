@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace App\Movie\Presentation\API;
 
-use App\Movie\Domain\Service\ReaderService\CheckTokenService;
-use App\Movie\Domain\Service\ReaderService\MovieReaderService;
 use App\Movie\Domain\Action\DeleteMovieAction;
+use App\Movie\Domain\Service\Movie\ReaderService\CheckTokenService;
+use App\Movie\Domain\Service\Movie\ReaderService\MovieReaderService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

@@ -2,11 +2,11 @@
 
 declare(strict_types = 1);
 
-namespace App\Movie\Domain\Service\ReaderService;
+namespace App\Movie\Domain\Service\Movie\ReaderService;
 
 use App\Movie\Domain\Entity\Movie;
 use App\Movie\Domain\Exception\MovieNotFindByUUIDException;
-use App\Movie\Domain\Repository\ReaderRepository\MovieReaderRepository;
+use App\Movie\Domain\Repository\Movie\ReaderRepository\MovieReaderRepository;
 use Doctrine\ORM\NonUniqueResultException;
 
 class MovieReaderService

@@ -2,11 +2,11 @@
 
 namespace App\Tests\Movie\Unit\CommandHandler;
 
-use PHPUnit\Framework\TestCase;
-use App\Movie\Application\CommandHandler\DeleteMovieCommandHandler;
 use App\Movie\Application\Command\DeleteMovieCommand;
+use App\Movie\Application\CommandHandler\DeleteMovieCommandHandler;
 use App\Movie\Domain\Entity\Movie;
-use App\Movie\Domain\Service\WriterService\MovieWriterService;
+use App\Movie\Domain\Service\Movie\WriterService\MovieWriterService;
+use PHPUnit\Framework\TestCase;
 
 class DeleteMovieCommandHandlerTest extends TestCase
 {
