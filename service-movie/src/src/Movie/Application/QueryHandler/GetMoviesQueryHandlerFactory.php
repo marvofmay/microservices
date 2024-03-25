@@ -15,16 +15,5 @@ class GetMoviesQueryHandlerFactory
             3 => new GetMoreThanOneWordInMovieTitleQueryHandler($getMoviesQuery, $entityManager),
             default => new GetMoviesQueryHandler($getMoviesQuery, $entityManager)
         };
-
-//        switch ($getMoviesQuery->getAlgorithm()) {
-//            case 1:
-//                return new GetRandomThreeMoviesQueryHandler($getMoviesQuery, $entityManager);
-//            case 2:
-//                return new GetEvenNumberOfLettersInMovieTitleAndStartWithWQueryHandler($getMoviesQuery, $entityManager);
-//            case 3:
-//                return new GetMoreThanOneWordInMovieTitleQueryHandler($getMoviesQuery, $entityManager);
-//            default:
-//                return new GetMoviesQueryHandler($getMoviesQuery, $entityManager);
-//        }
     }
 }
