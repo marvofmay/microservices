@@ -80,6 +80,12 @@ class GetMoviesQueryHandler
         }
 
         if (array_key_exists('deleted', $this->filters)) {
+            $this->queryBuilder = match ($this->filters['deleted']) {
+                0 => $this->queryBuilder->andWhere($this->queryBuilder->expr()->isNull('m.' . Movie::COLUMN_DELETED_AT)),
+                1 => $this->queryBuilder->andWhere($this->queryBuilder->expr()->isNotNull('m.' . Movie::COLUMN_DELETED_AT))
+            };
+
+            /*
             switch ($this->filters['deleted']) {
                 case 0:
                     $this->queryBuilder = $this->queryBuilder->andWhere($this->queryBuilder->expr()->isNull('m.' . Movie::COLUMN_DELETED_AT));
@@ -88,6 +94,7 @@ class GetMoviesQueryHandler
                     $this->queryBuilder = $this->queryBuilder->andWhere($this->queryBuilder->expr()->isNotNull('m.' . Movie::COLUMN_DELETED_AT));
                     break;
             }
+            */
         }
 
         if (array_key_exists('phrase', $this->filters)) {
