@@ -6,6 +6,6 @@ use App\User\Domain\Entity\SelectOption;
 
 interface SelectOptionWriterInterface
 {
-    public function saveSelectOptionInDB (SelectOption $selectOption): SelectOption;
-    public function updateSelectOptionInDB (SelectOption $selectOption): SelectOption;
+    function saveSelectOptionInDB (SelectOption $selectOption): SelectOption;
+    function updateSelectOptionInDB (SelectOption $selectOption): SelectOption;
 }

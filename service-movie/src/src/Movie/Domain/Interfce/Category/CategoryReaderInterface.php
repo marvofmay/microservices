@@ -8,5 +8,5 @@ use App\Movie\Domain\Entity\Category;
 
 interface CategoryReaderInterface
 {
-    public function getCategoryByNme(string $name): ?Category;
+    function getCategoryByNme(string $name): ?Category;
 }

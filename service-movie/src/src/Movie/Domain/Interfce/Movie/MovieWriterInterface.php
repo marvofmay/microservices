@@ -8,8 +8,8 @@ use App\Movie\Domain\Entity\Movie;
 
 interface MovieWriterInterface
 {
-    public function saveMovieInDB(Movie $movie): void;
-    public function saveMoviesAndCategoriesInDB (array $movies): void;
-    public function updateMovieInDB(Movie $movie): void;
-    public function deleteMovieCategories(Movie $movie): void;
+    function saveMovieInDB(Movie $movie): void;
+    function saveMoviesAndCategoriesInDB (array $movies): void;
+    function updateMovieInDB(Movie $movie): void;
+    function deleteMovieCategories(Movie $movie): void;
 }

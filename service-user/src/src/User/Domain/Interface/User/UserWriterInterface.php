@@ -6,6 +6,6 @@ use App\User\Domain\Entity\User;
 
 interface UserWriterInterface
 {
-    public function saveUserInDB(User $user, array $roles, array $addresses = [], array $skills = [], array $interests = []): User;
-    public function updateUserInDB(User $user, array $roles, array $addresses, array $skills, array $interests): User;
+    function saveUserInDB(User $user, array $roles, array $addresses = [], array $skills = [], array $interests = []): User;
+    function updateUserInDB(User $user, array $roles, array $addresses, array $skills, array $interests): User;
 }

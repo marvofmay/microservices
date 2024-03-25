@@ -6,6 +6,6 @@ use App\User\Domain\Entity\SelectOption;
 
 interface SelectOptionReaderInterface
 {
-    public function getSelectOptionByUUID(string $uuid): ?SelectOption;
-    public function getSelectOptionsKinds(): mixed;
+    function getSelectOptionByUUID(string $uuid): ?SelectOption;
+    function getSelectOptionsKinds(): mixed;
 }
